@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
+import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import axios from 'axios';
+
+const containerStyle = {
+  width: '300px',
+  height: '300px',
+};
 
 const LocationModal = () => {
   const [location, setLocation] = useState(''); // User input location
   const [coordinates, setCoordinates] = useState(null); // Store the coordinates
-  const [mapVisible, setMapVisible] = useState(false); // Show map after button click
+  const [mapVisible, setMapVisible] = useState(false); // Control map visibility
 
-  // Custom marker icon (optional)
-  const customMarker = new L.Icon({
-    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
+  // Google Maps API hook
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: 'AIzaSyBgR1cwD4FPz094syf6m8Wy-uqMbFEXI7s', // Replace with your API key
   });
 
   // Function to handle location search
@@ -22,7 +24,7 @@ const LocationModal = () => {
       if (res.data.length > 0) {
         const { lat, lon } = res.data[0];
         setCoordinates({ lat: parseFloat(lat), lng: parseFloat(lon) });
-        setMapVisible(true); // Show the map
+        setMapVisible(true); // Show the map once location is found
       } else {
         alert('Location not found!');
       }
@@ -50,23 +52,17 @@ const LocationModal = () => {
         Show Location on Map
       </button>
 
-      {/* Display map if location is found */}
-      {mapVisible && coordinates && (
-        <div className="h-[250px] w-[350px] mt-5">
-          <MapContainer
-            center={[coordinates.lat, coordinates.lng]}
-            zoom={13}
-            scrollWheelZoom={false}
-            className="h-full w-full"
+      {/* Display Google Map if coordinates are found */}
+      {mapVisible && isLoaded && coordinates && (
+        <div className="mt-5">
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={coordinates}
+            zoom={12}
           >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
-            />
-            <Marker position={[coordinates.lat, coordinates.lng]} icon={customMarker}>
-              <Popup>{location}</Popup>
-            </Marker>
-          </MapContainer>
+            {/* Marker at the found location */}
+            <Marker position={coordinates} />
+          </GoogleMap>
         </div>
       )}
     </div>

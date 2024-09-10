@@ -115,7 +115,7 @@ const MainModal = () => {
         {/* Progress Bar */}
         <div className="mb-4">
           <Progress
-            className="w-[330px] md:w-[400px]"
+            className="w-[300px] md:w-[400px]"
             percent={Math.round((currentStep / (steps.length - 1)) * 100)}
           />
         </div>
