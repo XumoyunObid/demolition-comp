@@ -6,11 +6,15 @@ import WorkModal from "./WorkModal";
 import AdditionalModal from "./AdditionalModal";
 import LocationModal from "./LocationModal";
 import CustomerModal from "./CustomerModal";
+import { useSelector } from "react-redux";
 
 const MainModal = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const formData = useSelector((state) => state.form);
+
+  console.log(formData);
 
   const showModal = () => {
     setOpen(true);

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setLocationData } from "../../../Redux/Slices/FormSlice"; // Import the action to store location data
 
 const containerStyle = {
   width: "350px",
@@ -11,10 +13,11 @@ const LocationModal = () => {
   const [location, setLocation] = useState(""); // User input location
   const [coordinates, setCoordinates] = useState(null); // Store the coordinates
   const [mapVisible, setMapVisible] = useState(false); // Control map visibility
+  const dispatch = useDispatch(); // Initialize Redux dispatch
 
   // Google Maps API hook
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyBgR1cwD4FPz094syf6m8Wy-uqMbFEXI7s", // Replace with your API key
+    googleMapsApiKey: 'AIzaSyBgR1cwD4FPz094syf6m8Wy-uqMbFEXI7s', // Store your API key in the .env file
   });
 
   // Function to handle location search
@@ -25,8 +28,12 @@ const LocationModal = () => {
       );
       if (res.data.length > 0) {
         const { lat, lon } = res.data[0];
-        setCoordinates({ lat: parseFloat(lat), lng: parseFloat(lon) });
+        const coordinates = { lat: parseFloat(lat), lng: parseFloat(lon) };
+        setCoordinates(coordinates);
         setMapVisible(true); // Show the map once location is found
+
+        // Dispatch the selected location and coordinates to Redux
+        dispatch(setLocationData({ location, coordinates }));
       } else {
         alert("Location not found!");
       }
@@ -51,7 +58,8 @@ const LocationModal = () => {
         <button
           onClick={findLocation}
           className="bg-blue-500 text-white py-2 px-4 rounded-md"
-        ><i className="fa-solid fa-magnifying-glass"></i>
+        >
+          <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
 
