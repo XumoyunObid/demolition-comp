@@ -5,12 +5,12 @@ const YearModal = () => {
   const [value, setValue] = useState(6);
 
   const options = {
-    1: "1 to 5 years",
-    2: "6 to 10 years",
-    3: "11 to 15 years",
-    4: "16 to 20 years",
-    5: "More than 20 years",
-    6: "Not clear",
+    1: "1～5年",
+    2: "6～10年",
+    3: "11～15年",
+    4: "16～20年",
+    5: "20年以上",
+    6: "不明",
   };
 
   const onChange = (e) => {
@@ -23,22 +23,22 @@ const YearModal = () => {
     <Radio.Group onChange={onChange} value={value} className="w-full">
       <Space direction="vertical" className="w-full">
         <Radio value={1} className="p-3 font-semibold text-base rounded-md border flex items-start w-full">
-          1 to 5 years
+        1～5年
         </Radio>
         <Radio value={2} className="p-3 font-semibold text-base rounded-md border flex items-start w-full">
-          6 to 10 years
+        6～10年
         </Radio>
         <Radio value={3} className="p-3 font-semibold text-base rounded-md border flex items-start w-full">
-          11 to 15 years
+        11～15年
         </Radio>
         <Radio value={4} className="p-3 font-semibold text-base rounded-md border flex items-start w-full">
-          16 to 20 years
+        16～20年
         </Radio>
         <Radio value={5} className="p-3 font-semibold text-base rounded-md border flex items-start w-full">
-          More than 20 years
+        20年以上
         </Radio>
         <Radio value={6} className="p-3 font-semibold text-base rounded-md border flex items-start w-full">
-          Not clear
+        不明
         </Radio>
       </Space>
     </Radio.Group>

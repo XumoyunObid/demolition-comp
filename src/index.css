@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Apply Noto Sans Japanese to the entire application */
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+}

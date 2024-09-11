@@ -1,6 +1,8 @@
 import React from "react";
 import banner from "../../../public/banner.jpg";
 import MainModal from "./Components/Modal";
+import ApartmentModal from "./Components/ApartmentModal";
+import ThirdModal from "./Components/ThirdModal";
 
 const Home = () => {
   return (
@@ -12,14 +14,15 @@ const Home = () => {
           <h1 className="text-3xl md:text-5xl font-bold mb-4">
             東京都の <br />
             解体工事 <br />
-            のプロが近くに259人います
           </h1>
           <div className="p-8 flex flex-col items-center gap-3 rounded-lg bg-white">
-            <h2 className="text-lg text-black">どちらで解体工事をご希望ですか？</h2>
+            <h2 className="text-lg text-black">
+              どちらで解体工事をご希望ですか？
+            </h2>
             <div className="flex flex-col md:flex-row gap-4">
-            <MainModal />
-            <MainModal />
-            <MainModal />
+              <MainModal />
+              <ApartmentModal />
+              <ThirdModal/>
             </div>
           </div>
         </div>
