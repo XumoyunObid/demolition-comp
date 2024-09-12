@@ -6,8 +6,10 @@ import WorkModal from "./WorkModal";
 import AdditionalModal from "./AdditionalModal";
 import LocationModal from "./LocationModal";
 import CustomerModal from "./CustomerModal";
+import ConfirmModal from "./ConfirmModal";
+import CalendlyModal from "./CalendlyModal";
 
-const ApartmentModal = () => {
+const MainModal = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -93,6 +95,14 @@ const ApartmentModal = () => {
       </h1>
       <CustomerModal />
     </div>,
+    <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
+      <h1 className="text-xl font-bold text-blue-500">Calendly</h1>
+      <CalendlyModal />
+    </div>,
+    <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
+      <h1 className="text-xl font-bold text-blue-500">Confirm</h1>
+      <ConfirmModal />
+    </div>,
   ];
 
   return (
@@ -100,11 +110,12 @@ const ApartmentModal = () => {
       <Button
         type="default"
         onClick={showModal}
-        className="flex md:flex-col gap-3 p-6 items-center justify-between w-[280px] text-lg h-auto"
+        className="flex md:flex-col gap-3 p-[18px] items-center justify-between w-[280px] text-lg h-auto"
       >
         <i className="fa-solid fa-building text-4xl text-blue-500"></i>
-        <span>
-          集合住宅 <br /> （マンション・アパート）
+        <span className="text-sm">
+          集合住宅 <br />
+          （マンション・アパート）
         </span>
       </Button>
       <Modal
@@ -139,4 +150,4 @@ const ApartmentModal = () => {
   );
 };
 
-export default ApartmentModal;
+export default MainModal;

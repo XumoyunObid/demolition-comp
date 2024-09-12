@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Radio, Space } from "antd";
 import { useDispatch } from "react-redux";
-import { setWorkDescription } from "../../../Redux/Slices/FormSlice"; // Import the action to store the selected option
+import { setWorkDetails } from "../../../Redux/Slices/FormSlice"; // Import the action to store the selected option
 
 const WorkModal = () => {
   const [value, setValue] = useState(5);
@@ -21,7 +21,7 @@ const WorkModal = () => {
     console.log(`Selected option: ${options[selectedValue]}`);
 
     // Dispatch the selected work description to Redux
-    dispatch(setWorkDescription(options[selectedValue]));
+    dispatch(setWorkDetails(options[selectedValue]));
   };
 
   return (

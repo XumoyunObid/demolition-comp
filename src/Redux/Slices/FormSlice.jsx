@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Initial state of your form data
 const initialState = {
-  year: '不明', // from first modal
-  startDate: '未定', // from second modal
-  workDetails: 'その他', // from third modal
-  description: '', // from fourth modal
-  location: '', // from fifth modal
+  year: '不明',
+  startDate: '未定',
+  workDetails: 'その他',
+  description: 'No description...',
+  location: '',
   contact: {
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-  }, // from sixth modal (customer modal)
+  },
+  buildingType: '',
 };
 
 const formSlice = createSlice({
@@ -25,7 +25,10 @@ const formSlice = createSlice({
     setStartDate(state, action) {
       state.startDate = action.payload;
     },
-    setWorkDescription(state, action) {
+    setWorkDetails(state, action) {
+      state.workDetails = action.payload;
+    },
+    setDescription(state, action) {
       state.description = action.payload;
     },
     setLocationData(state, action) {
@@ -34,20 +37,23 @@ const formSlice = createSlice({
     setContact(state, action) {
       state.contact = {
         ...state.contact,
-        ...action.payload, // expecting {firstName, lastName, email, phone}
+        ...action.payload,
       };
+    },
+    setSelectedButton(state, action) {
+      state.buildingType = action.payload;
     },
   },
 });
 
-// Export the actions
 export const {
   setYear,
   setStartDate,
-  setWorkDescription,
+  setWorkDetails,
+  setDescription,
   setLocationData,
   setContact,
+  setSelectedButton,
 } = formSlice.actions;
 
-// Export the reducer
 export default formSlice.reducer;

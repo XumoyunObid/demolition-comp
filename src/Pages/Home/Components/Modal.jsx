@@ -6,15 +6,15 @@ import WorkModal from "./WorkModal";
 import AdditionalModal from "./AdditionalModal";
 import LocationModal from "./LocationModal";
 import CustomerModal from "./CustomerModal";
-import { useSelector } from "react-redux";
+import ConfirmModal from "./ConfirmModal";
+import CalendlyModal from "./CalendlyModal";
 
 const MainModal = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const formData = useSelector((state) => state.form);
-
-  console.log(formData);
+  const [locationFilled, setLocationFilled] = useState(false); // Track location input
+  const [contactFilled, setContactFilled] = useState(false); // Track contact input
 
   const showModal = () => {
     setOpen(true);
@@ -63,7 +63,7 @@ const MainModal = () => {
       </h1>
       <StartDateModal />
     </div>,
-    <div className="py-[50px] md:w-450px] flex flex-col gap-5 items-center h-[450px] justify-center">
+    <div className="py-[50px] md:w-450px flex flex-col gap-5 items-center h-[450px] justify-center">
       <h1 className="text-xl font-bold text-blue-500">
         解体工事の内容を教えてください
       </h1>
@@ -82,22 +82,36 @@ const MainModal = () => {
       <br />
       <AdditionalModal />
     </div>,
-    <div className="py-[50px] md:w-450px] flex flex-col gap-5 items-center h-[450px] overflow-y-auto">
+    <div className="py-[50px] md:w-450px flex flex-col gap-5 items-center h-[450px] overflow-y-auto">
       <h1 className="text-xl font-bold text-blue-500">
         解体工事の内容を教えてください
       </h1>
       <h2 className="pl-[10px]">
         郵便番号・駅名もしくは市区町村までご入力いただくと、更に条件に合ったプロが見つかります。
       </h2>
-      <LocationModal />
+      <LocationModal setLocationFilled={setLocationFilled} />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
       <h1 className="text-xl font-bold text-blue-500">
         お客様情報を入力してください
       </h1>
-      <CustomerModal />
+      <CustomerModal setContactFilled={setContactFilled} />
+    </div>,
+    <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
+      <h1 className="text-xl font-bold text-blue-500">Calendly</h1>
+      <CalendlyModal />
+    </div>,
+    <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
+      <h1 className="text-xl font-bold text-blue-500">Confirm</h1>
+      <ConfirmModal />
     </div>,
   ];
+
+  const isNextDisabled = () => {
+    if (currentStep === 5) return !locationFilled;
+    if (currentStep === 6) return !contactFilled;
+    return false;
+  };
 
   return (
     <>
@@ -121,6 +135,7 @@ const MainModal = () => {
             type="primary"
             loading={loading}
             onClick={handleOk}
+            disabled={isNextDisabled()} // Disable if inputs are not filled
           >
             {currentStep < steps.length - 1 ? "次へ" : "提出する"}
           </Button>,

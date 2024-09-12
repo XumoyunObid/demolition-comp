@@ -1,9 +1,16 @@
 import TextArea from "antd/es/input/TextArea";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setDescription } from "../../../Redux/Slices/FormSlice";
 
 const AdditionalModal = () => {
+  const dispatch = useDispatch(); // Initialize Redux dispatch
+
   const handleChange = (e) => {
-    console.log(e.target.value);
+    const value = e.target.value;
+    console.log(value);
+
+    dispatch(setDescription(value));
   };
   return (
     <div>

@@ -3,8 +3,17 @@ import banner from "../../../public/banner.jpg";
 import MainModal from "./Components/Modal";
 import ApartmentModal from "./Components/ApartmentModal";
 import ThirdModal from "./Components/ThirdModal";
+import { useDispatch } from "react-redux"; // Import the hook
+import { setSelectedButton } from "../../Redux/Slices/FormSlice"; // Import the action
 
 const Home = () => {
+  const dispatch = useDispatch();
+
+  const handleButtonClick = (buttonName) => {
+    // Dispatch the action to store the clicked button name
+    dispatch(setSelectedButton(buttonName));
+  };
+
   return (
     <div>
       <div className="relative w-full h-lvh md:h-[700px]">
@@ -20,9 +29,16 @@ const Home = () => {
               どちらで解体工事をご希望ですか？
             </h2>
             <div className="flex flex-col md:flex-row gap-4">
-              <MainModal />
-              <ApartmentModal />
-              <ThirdModal/>
+              {/* On button click, dispatch the button name */}
+              <div onClick={() => handleButtonClick("戸建住宅")}>
+                <MainModal />
+              </div>
+              <div onClick={() => handleButtonClick("集合住宅")}>
+                <ApartmentModal />
+              </div>
+              <div onClick={() => handleButtonClick("その他")}>
+                <ThirdModal />
+              </div>
             </div>
           </div>
         </div>

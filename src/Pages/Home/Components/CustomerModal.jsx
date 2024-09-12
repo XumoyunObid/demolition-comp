@@ -1,34 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setContact } from '../../../Redux/Slices/FormSlice'; // Import the action to store customer data
+import { setContact } from '../../../Redux/Slices/FormSlice'; 
 
-const CustomerModal = () => {
+const CustomerModal = ({ setContactFilled }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState(''); // Optional phone number
+  const [phone, setPhone] = useState(''); // Optional field
 
-  const dispatch = useDispatch(); // Initialize Redux dispatch
+  const dispatch = useDispatch();
 
-  // Function to handle form changes and dispatch the data to Redux
+  // Function to update the Redux store and local state
   const handleInputChange = (field, value) => {
     if (field === 'firstName') setFirstName(value);
     if (field === 'lastName') setLastName(value);
     if (field === 'email') setEmail(value);
     if (field === 'phone') setPhone(value);
 
-    // Dispatch customer info to Redux when any field is updated
-    dispatch(setContact({
-      firstName: field === 'firstName' ? value : firstName,
-      lastName: field === 'lastName' ? value : lastName,
-      email: field === 'email' ? value : email,
-      phone: field === 'phone' ? value : phone,
-    }));
+    // Update Redux store
+    dispatch(
+      setContact({
+        firstName: field === 'firstName' ? value : firstName,
+        lastName: field === 'lastName' ? value : lastName,
+        email: field === 'email' ? value : email,
+        phone: field === 'phone' ? value : phone,
+      })
+    );
   };
+
+  // Effect to check if required fields are filled
+  useEffect(() => {
+    if (firstName && lastName && email) {
+      setContactFilled(true); // Enable "Next" button when all required fields are filled
+    } else {
+      setContactFilled(false); // Disable "Next" button when required fields are not filled
+    }
+  }, [firstName, lastName, email, setContactFilled]);
 
   return (
     <div className="flex flex-col gap-5 items-center">
-      {/* First Name (名) */}
       <input
         type="text"
         value={firstName}
@@ -38,7 +48,6 @@ const CustomerModal = () => {
         required
       />
 
-      {/* Last Name (姓) */}
       <input
         type="text"
         value={lastName}
@@ -48,7 +57,6 @@ const CustomerModal = () => {
         required
       />
 
-      {/* Email (メールアドレス) */}
       <input
         type="email"
         value={email}
@@ -58,7 +66,6 @@ const CustomerModal = () => {
         required
       />
 
-      {/* Phone Number (電話番号) - Optional */}
       <input
         type="tel"
         value={phone}
