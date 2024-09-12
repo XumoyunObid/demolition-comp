@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setLocationData } from "../../../Redux/Slices/FormSlice"; // Import the action to store location data
 
 const containerStyle = {
-  width: "350px",
+  width: "300px",
   height: "250px",
 };
 
@@ -56,7 +56,7 @@ const LocationModal = ({ setLocationFilled }) => {
   return (
     <div className="flex flex-col gap-5">
       {/* Input for typing location */}
-      <div className="flex w-[350px] gap-3">
+      <div className="flex w-[300px] gap-3">
         <input
           type="text"
           value={location}
