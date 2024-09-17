@@ -10,42 +10,16 @@ const Header = () => {
   useEffect(() => {
     // Close the bar when the location changes
     setShow(false);
-    enableBodyScroll(); // Enable scrolling when the bar is closed
   }, [location]);
 
-  const handleShow = () => {
-    setShow(!show);
-    if (!show) {
-      disableBodyScroll(); // Disable scrolling when the bar is open
-    } else {
-      enableBodyScroll(); // Enable scrolling when the bar is closed
-    }
-  };
-
-  const handleToHome = () => {
-    navigate("/");
+  const handleToAbout = () => {
+    navigate("/about");
     setShow(false); // Close the bar after navigation
-    enableBodyScroll(); // Enable scrolling when the bar is closed
-  };
-
-  const handleToProducts = () => {
-    navigate("/all-products");
-    setShow(false); // Close the bar after navigation
-    enableBodyScroll(); // Enable scrolling when the bar is closed
   };
 
   const handleToContact = () => {
     navigate("/contacts");
-    setShow(false); // Close the bar after navigation
-    enableBodyScroll(); // Enable scrolling when the bar is closed
-  };
-
-  const disableBodyScroll = () => {
-    document.body.style.overflow = "hidden";
-  };
-
-  const enableBodyScroll = () => {
-    document.body.style.overflow = "";
+    setShow(false);// Enable scrolling when the bar is closed
   };
 
   return (
@@ -60,10 +34,14 @@ const Header = () => {
         {/* Desktop Menu */}
         <ul className="lg:flex items-center gap-6 hidden">
           <li className="hover:underline">
-            <button onClick={handleToProducts} className="text-lg">List of services</button>
+            <button onClick={handleToContact} className="text-lg">
+              Contact us
+            </button>
           </li>
           <li className="hover:underline">
-            <button onClick={handleToContact} className="text-lg">For businesses, click here</button>
+            <button onClick={handleToAbout} className="text-lg">
+              About Us
+            </button>
           </li>
         </ul>
 

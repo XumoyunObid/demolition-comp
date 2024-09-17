@@ -8,13 +8,18 @@ import LocationModal from "./LocationModal";
 import CustomerModal from "./CustomerModal";
 import ConfirmModal from "./ConfirmModal";
 import CalendlyModal from "./CalendlyModal";
+import { useSelector } from "react-redux";
+import emailjs from "emailjs-com";
+import { toast } from "react-toastify";
 
 const MainModal = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [locationFilled, setLocationFilled] = useState(false); // Track location input
-  const [contactFilled, setContactFilled] = useState(false); // Track contact input
+  const [locationFilled, setLocationFilled] = useState(false);
+  const [contactFilled, setContactFilled] = useState(false);
+
+  const formData = useSelector((state) => state.form);
 
   const showModal = () => {
     setOpen(true);
@@ -25,12 +30,45 @@ const MainModal = () => {
       setCurrentStep(currentStep + 1);
     } else {
       setLoading(true);
+      sendEmail();
       setTimeout(() => {
         setLoading(false);
         setOpen(false);
         setCurrentStep(0);
       }, 3000);
     }
+  };
+
+  // Function to send email with formData
+  const sendEmail = () => {
+    const emailParams = {
+      buildingType: formData.buildingType,
+      buildingAge: formData.year,
+      startDate: formData.startDate,
+      workDetails: formData.workDetails,
+      description: formData.description,
+      location: formData.location.location,
+      name: `${formData.contact.firstName} ${formData.contact.lastName}`,
+      email: formData.contact.email,
+      phone: formData.contact.phone,
+    };
+
+    emailjs
+      .send(
+        "service_8u34gpb", // Your EmailJS service ID
+        "template_smgqomh", // Your EmailJS template ID
+        emailParams,
+        "4t0mVFkL5snSt8fWo" // Your EmailJS public key
+      )
+      .then(
+        () => {
+          console.log("SUCCESS!");
+          toast.success("Form sent successfully!");
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+        }
+      );
   };
 
   const handleCancel = () => {
