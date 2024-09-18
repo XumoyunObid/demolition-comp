@@ -19,6 +19,7 @@ const ConfirmModal = () => {
       </p>
       <p>Email: {formData.contact.email}</p>
       <p>Phone: {formData.contact.phone}</p>
+      <p>Appointment date: {formData.selectedDate}</p>
     </div>
   );
 };

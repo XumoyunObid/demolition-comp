@@ -7,7 +7,7 @@ import AdditionalModal from "./AdditionalModal";
 import LocationModal from "./LocationModal";
 import CustomerModal from "./CustomerModal";
 import ConfirmModal from "./ConfirmModal";
-import CalendlyModal from "./CalendlyModal";
+import GoogleCalendarModal from "./CalendlyModal";
 import { useSelector } from "react-redux";
 import emailjs from "emailjs-com";
 import { toast } from "react-toastify";
@@ -39,7 +39,6 @@ const MainModal = () => {
     }
   };
 
-  // Function to send email with formData
   const sendEmail = () => {
     const emailParams = {
       buildingType: formData.buildingType,
@@ -51,14 +50,15 @@ const MainModal = () => {
       name: `${formData.contact.firstName} ${formData.contact.lastName}`,
       email: formData.contact.email,
       phone: formData.contact.phone,
+      selectedDate: formData.selectedDate,
     };
 
     emailjs
       .send(
-        "service_8u34gpb", // Your EmailJS service ID
-        "template_smgqomh", // Your EmailJS template ID
+        "service_8u34gpb",
+        "template_smgqomh",
         emailParams,
-        "4t0mVFkL5snSt8fWo" // Your EmailJS public key
+        "4t0mVFkL5snSt8fWo"
       )
       .then(
         () => {
@@ -80,6 +80,11 @@ const MainModal = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const handleDateSelected = (data) => {
+    console.log("Selected date and slots:", data);
+    setCurrentStep(currentStep + 1); // Proceed to the next step
   };
 
   const steps = [
@@ -136,8 +141,8 @@ const MainModal = () => {
       <CustomerModal setContactFilled={setContactFilled} />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">Calendly</h1>
-      <CalendlyModal />
+      <h1 className="text-xl font-bold text-blue-500">Calendar</h1>
+      <GoogleCalendarModal />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
       <h1 className="text-xl font-bold text-blue-500">Confirm</h1>
@@ -173,13 +178,12 @@ const MainModal = () => {
             type="primary"
             loading={loading}
             onClick={handleOk}
-            disabled={isNextDisabled()} // Disable if inputs are not filled
+            disabled={isNextDisabled()}
           >
             {currentStep < steps.length - 1 ? "次へ" : "提出する"}
           </Button>,
         ]}
       >
-        {/* Progress Bar */}
         <div className="mb-4">
           <Progress
             className="w-[300px] md:w-[400px]"
@@ -187,7 +191,6 @@ const MainModal = () => {
           />
         </div>
 
-        {/* Display the current step content */}
         {steps[currentStep]}
       </Modal>
     </>

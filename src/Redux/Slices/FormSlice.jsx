@@ -13,6 +13,7 @@ const initialState = {
     phone: '',
   },
   buildingType: '',
+  selectedDate: null,
 };
 
 const formSlice = createSlice({
@@ -43,6 +44,9 @@ const formSlice = createSlice({
     setSelectedButton(state, action) {
       state.buildingType = action.payload;
     },
+    setAppointmentDate: (state, action) => {
+      state.selectedDate = action.payload;
+    },
   },
 });
 
@@ -54,6 +58,9 @@ export const {
   setLocationData,
   setContact,
   setSelectedButton,
+  setAppointmentDate
 } = formSlice.actions;
+
+export const selectAppointmentDate = (state) => state.form.selectedDate;
 
 export default formSlice.reducer;
