@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Modal, Button, DatePicker, TimePicker, message } from "antd";
+import { Modal, Button, DatePicker, message, Radio } from "antd";
 import { useDispatch } from "react-redux";
 import { setAppointmentDate } from "../../../Redux/Slices/FormSlice";
 
 const DateTimePickerModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTimeRange, setSelectedTimeRange] = useState(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const dispatch = useDispatch();
 
   const showModal = () => {
@@ -15,38 +15,40 @@ const DateTimePickerModal = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setSelectedDate(null);
+    setSelectedTimeSlot(null);
   };
 
   const onDateChange = (date, dateString) => {
     if (date) {
       setSelectedDate(dateString);
-      console.log("Selected Date:", dateString);
     } else {
       setSelectedDate(null);
+      setSelectedTimeSlot(null); // Reset time slot if date is cleared
     }
   };
 
-  const onTimeChange = (time, timeString) => {
-    if (time && time.length === 2) {
-      const formattedTime = `from ${timeString[0]} to ${timeString[1]}`;
-      setSelectedTimeRange(formattedTime);
-      console.log("Selected Time Range:", formattedTime);
-    } else {
-      setSelectedTimeRange(null);
-    }
+  const onTimeSlotChange = (e) => {
+    setSelectedTimeSlot(e.target.value);
   };
 
   const onConfirmAppointment = () => {
-    if (selectedDate && selectedTimeRange) {
-      const appointment = `${selectedDate} ${selectedTimeRange}`;
-      console.log("Appointment:", appointment);
+    if (selectedDate && selectedTimeSlot) {
+      const appointment = `${selectedDate} from ${selectedTimeSlot}`;
       dispatch(setAppointmentDate(appointment));
       message.success(`Appointment confirmed for ${appointment}`);
       setIsModalVisible(false);
     } else {
-      message.error("Please select both a date and time.");
+      message.error("Please select both a date and time slot.");
     }
   };
+
+  const timeSlots = [
+    "09:00 - 12:00",
+    "12:00 - 14:00",
+    "14:00 - 16:00",
+    "16:00 - 18:00",
+  ];
 
   return (
     <div>
@@ -65,20 +67,43 @@ const DateTimePickerModal = () => {
           format="YYYY-MM-DD"
           style={{ width: "100%", marginBottom: 20 }}
         />
-        <TimePicker.RangePicker
-          onChange={onTimeChange}
-          format="HH:mm"
-          style={{ width: "100%", marginBottom: 20 }}
-          use12Hours={false} 
-        />
-        <Button type="primary" onClick={onConfirmAppointment}>
+        
+        {/* Render time slots only if a date is selected */}
+        {selectedDate && (
+          <Radio.Group
+            onChange={onTimeSlotChange}
+            value={selectedTimeSlot}
+            style={{ width: "100%", marginBottom: 20 }}
+          >
+            {timeSlots.map((slot) => (
+              <Radio.Button
+                key={slot}
+                value={slot}
+                style={{
+                  display: "block",
+                  marginBottom: 10,
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                {slot}
+              </Radio.Button>
+            ))}
+          </Radio.Group>
+        )}
+        
+        <Button
+          type="primary"
+          onClick={onConfirmAppointment}
+          disabled={!selectedDate || !selectedTimeSlot} // Disable button if date or time slot is not selected
+        >
           Confirm Appointment
         </Button>
       </Modal>
 
-      {selectedDate && selectedTimeRange && (
+      {selectedDate && selectedTimeSlot && (
         <div style={{ marginTop: 20 }}>
-          <strong>Selected Date and Time:</strong> {`${selectedDate} ${selectedTimeRange}`}
+          <strong>Selected Date and Time Slot:</strong> {`${selectedDate} from ${selectedTimeSlot}`}
         </div>
       )}
     </div>

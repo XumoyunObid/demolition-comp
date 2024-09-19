@@ -22,7 +22,7 @@ const Header = () => {
       <div className="container flex items-center justify-between py-5">
         <RouterLink to="/" className="flex items-center">
           {/* <img className="w-[120px]" src={logo} alt="" /> */}
-          <p className="text-3xl">Logo</p>
+          <i className="fa-solid fa-w text-3xl"></i>
         </RouterLink>
         <ul className="lg:flex items-center gap-6 hidden">
           <li className="hover:underline">
