@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-scroll";
 import Bar from "./Bar/Bar";
 
 const Header = () => {
@@ -8,30 +9,21 @@ const Header = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Close the bar when the location changes
     setShow(false);
   }, [location]);
 
-  const handleToAbout = () => {
-    navigate("/about");
-    setShow(false); // Close the bar after navigation
-  };
-
   const handleToContact = () => {
     navigate("/contacts");
-    setShow(false);// Enable scrolling when the bar is closed
+    setShow(false);
   };
 
   return (
     <div>
       <div className="container flex items-center justify-between py-5">
-        {/* Logo Section */}
-        <Link to="/" className="flex items-center">
+        <RouterLink to="/" className="flex items-center">
           {/* <img className="w-[120px]" src={logo} alt="" /> */}
           <p className="text-3xl">Logo</p>
-        </Link>
-
-        {/* Desktop Menu */}
+        </RouterLink>
         <ul className="lg:flex items-center gap-6 hidden">
           <li className="hover:underline">
             <button onClick={handleToContact} className="text-lg">
@@ -39,13 +31,16 @@ const Header = () => {
             </button>
           </li>
           <li className="hover:underline">
-            <button onClick={handleToAbout} className="text-lg">
+            <Link
+              to="about-us"
+              smooth={true}
+              duration={500}
+              className="text-lg cursor-pointer"
+            >
               About Us
-            </button>
+            </Link>
           </li>
         </ul>
-
-        {/* Mobile Menu (Hamburger) */}
         <div className="lg:hidden">
           <Bar />
         </div>

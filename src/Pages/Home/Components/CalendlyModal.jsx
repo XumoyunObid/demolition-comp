@@ -3,12 +3,11 @@ import { Modal, Button, DatePicker, TimePicker, message } from "antd";
 import { useDispatch } from "react-redux";
 import { setAppointmentDate } from "../../../Redux/Slices/FormSlice";
 
-
 const DateTimePickerModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
-  const dispatch = useDispatch()
+  const [selectedTimeRange, setSelectedTimeRange] = useState(null);
+  const dispatch = useDispatch();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -21,24 +20,25 @@ const DateTimePickerModal = () => {
   const onDateChange = (date, dateString) => {
     if (date) {
       setSelectedDate(dateString);
-      console.log('Selected Date:', dateString); 
+      console.log("Selected Date:", dateString);
     } else {
       setSelectedDate(null);
     }
   };
 
   const onTimeChange = (time, timeString) => {
-    if (time) {
-      setSelectedTime(timeString);
-      console.log("Selected Time:", timeString); 
+    if (time && time.length === 2) {
+      const formattedTime = `from ${timeString[0]} to ${timeString[1]}`;
+      setSelectedTimeRange(formattedTime);
+      console.log("Selected Time Range:", formattedTime);
     } else {
-      setSelectedTime(null);
+      setSelectedTimeRange(null);
     }
   };
 
   const onConfirmAppointment = () => {
-    if (selectedDate && selectedTime) {
-      const appointment = `${selectedDate} ${selectedTime}`;
+    if (selectedDate && selectedTimeRange) {
+      const appointment = `${selectedDate} ${selectedTimeRange}`;
       console.log("Appointment:", appointment);
       dispatch(setAppointmentDate(appointment));
       message.success(`Appointment confirmed for ${appointment}`);
@@ -65,20 +65,20 @@ const DateTimePickerModal = () => {
           format="YYYY-MM-DD"
           style={{ width: "100%", marginBottom: 20 }}
         />
-        <TimePicker
+        <TimePicker.RangePicker
           onChange={onTimeChange}
           format="HH:mm"
           style={{ width: "100%", marginBottom: 20 }}
-          use12Hours={false} // Set to true if you prefer 12-hour format
+          use12Hours={false} 
         />
         <Button type="primary" onClick={onConfirmAppointment}>
           Confirm Appointment
         </Button>
       </Modal>
 
-      {selectedDate && selectedTime && (
+      {selectedDate && selectedTimeRange && (
         <div style={{ marginTop: 20 }}>
-          <strong>Selected Date and Time:</strong> {`${selectedDate} ${selectedTime}`}
+          <strong>Selected Date and Time:</strong> {`${selectedDate} ${selectedTimeRange}`}
         </div>
       )}
     </div>

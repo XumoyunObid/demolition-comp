@@ -7,12 +7,19 @@ import AdditionalModal from "./AdditionalModal";
 import LocationModal from "./LocationModal";
 import CustomerModal from "./CustomerModal";
 import ConfirmModal from "./ConfirmModal";
-import CalendlyModal from "./CalendlyModal";
+import GoogleCalendarModal from "./CalendlyModal";
+import { useSelector } from "react-redux";
+import emailjs from "emailjs-com";
+import { toast } from "react-toastify";
 
 const MainModal = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [locationFilled, setLocationFilled] = useState(false);
+  const [contactFilled, setContactFilled] = useState(false);
+
+  const formData = useSelector((state) => state.form);
 
   const showModal = () => {
     setOpen(true);
@@ -23,12 +30,45 @@ const MainModal = () => {
       setCurrentStep(currentStep + 1);
     } else {
       setLoading(true);
+      sendEmail();
       setTimeout(() => {
         setLoading(false);
         setOpen(false);
         setCurrentStep(0);
       }, 3000);
     }
+  };
+
+  const sendEmail = () => {
+    const emailParams = {
+      buildingType: formData.buildingType,
+      buildingAge: formData.year,
+      startDate: formData.startDate,
+      workDetails: formData.workDetails,
+      description: formData.description,
+      location: formData.location.location,
+      name: `${formData.contact.firstName} ${formData.contact.lastName}`,
+      email: formData.contact.email,
+      phone: formData.contact.phone,
+      selectedDate: formData.selectedDate,
+    };
+
+    emailjs
+      .send(
+        "service_8u34gpb",
+        "template_smgqomh",
+        emailParams,
+        "4t0mVFkL5snSt8fWo"
+      )
+      .then(
+        () => {
+          console.log("SUCCESS!");
+          toast.success("Form sent successfully!");
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+        }
+      );
   };
 
   const handleCancel = () => {
@@ -40,6 +80,11 @@ const MainModal = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const handleDateSelected = (data) => {
+    console.log("Selected date and slots:", data);
+    setCurrentStep(currentStep + 1); // Proceed to the next step
   };
 
   const steps = [
@@ -61,7 +106,7 @@ const MainModal = () => {
       </h1>
       <StartDateModal />
     </div>,
-    <div className="py-[50px] md:w-450px] flex flex-col gap-5 items-center h-[450px] justify-center">
+    <div className="py-[50px] md:w-450px flex flex-col gap-5 items-center h-[450px] justify-center">
       <h1 className="text-xl font-bold text-blue-500">
         解体工事の内容を教えてください
       </h1>
@@ -80,30 +125,36 @@ const MainModal = () => {
       <br />
       <AdditionalModal />
     </div>,
-    <div className="py-[50px] md:w-450px] flex flex-col gap-5 items-center h-[450px] overflow-y-auto">
+    <div className="py-[50px] md:w-450px flex flex-col gap-5 items-center h-[450px] overflow-y-auto">
       <h1 className="text-xl font-bold text-blue-500">
         解体工事の内容を教えてください
       </h1>
       <h2 className="pl-[10px]">
         郵便番号・駅名もしくは市区町村までご入力いただくと、更に条件に合ったプロが見つかります。
       </h2>
-      <LocationModal />
+      <LocationModal setLocationFilled={setLocationFilled} />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
       <h1 className="text-xl font-bold text-blue-500">
         お客様情報を入力してください
       </h1>
-      <CustomerModal />
+      <CustomerModal setContactFilled={setContactFilled} />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">Calendly</h1>
-      <CalendlyModal />
+      <h1 className="text-xl font-bold text-blue-500">Calendar</h1>
+      <GoogleCalendarModal />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
       <h1 className="text-xl font-bold text-blue-500">Confirm</h1>
       <ConfirmModal />
     </div>,
   ];
+
+  const isNextDisabled = () => {
+    if (currentStep === 5) return !locationFilled;
+    if (currentStep === 6) return !contactFilled;
+    return false;
+  };
 
   return (
     <>
@@ -127,12 +178,12 @@ const MainModal = () => {
             type="primary"
             loading={loading}
             onClick={handleOk}
+            disabled={isNextDisabled()}
           >
             {currentStep < steps.length - 1 ? "次へ" : "提出する"}
           </Button>,
         ]}
       >
-        {/* Progress Bar */}
         <div className="mb-4">
           <Progress
             className="w-[300px] md:w-[400px]"
@@ -140,7 +191,6 @@ const MainModal = () => {
           />
         </div>
 
-        {/* Display the current step content */}
         {steps[currentStep]}
       </Modal>
     </>
