@@ -26,7 +26,7 @@ const AboutUs = () => {
         </div>
 
         <div
-          className="w-full md:w-1/2 h-64 md:h-80 bg-cover bg-center p-8 text-white flex items-end rounded-lg shadow-lg"
+          className="w-full md:w-1/2 h-84 md:h-80 bg-cover bg-center p-8 text-white flex items-end rounded-lg shadow-lg"
           style={{
             backgroundImage: `url(${banner3})`,
           }}
