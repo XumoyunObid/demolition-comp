@@ -163,7 +163,7 @@ const MainModal = () => {
         onClick={showModal}
         className="flex md:flex-col gap-3 p-[18px] items-center justify-between w-[280px] text-lg h-auto"
       >
-        <i className="fa-solid fa-building text-4xl text-blue-500"></i>
+        <i className="fa-solid fa-building text-4xl text-blue-500 ml-[10px] md:ml-[-0px]"></i>
         <span className="text-sm">
           集合住宅 <br />
           （マンション・アパート）

@@ -84,7 +84,7 @@ const MainModal = () => {
 
   const handleDateSelected = (data) => {
     console.log("Selected date and slots:", data);
-    setCurrentStep(currentStep + 1); // Proceed to the next step
+    setCurrentStep(currentStep + 1);
   };
 
   const steps = [
@@ -161,10 +161,10 @@ const MainModal = () => {
       <Button
         type="default"
         onClick={showModal}
-        className="flex md:flex-col gap-3 p-6 items-center justify-between w-[280px] text-lg h-auto"
+        className="flex md:flex-col gap-3 p-6 items-center justify-between w-[280px] h-auto"
       >
         <i className="fa-solid fa-shop text-4xl text-blue-500"></i>
-        その他
+        <span className="text-lg mr-[50px] md:mr-[-0px]">その他</span>
       </Button>
       <Modal
         open={open}

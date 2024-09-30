@@ -161,10 +161,10 @@ const MainModal = () => {
       <Button
         type="default"
         onClick={showModal}
-        className="flex md:flex-col gap-3 p-6 items-center justify-between w-[280px] text-lg h-auto"
+        className="flex md:flex-col gap-3 p-6 items-center justify-between w-[280px] h-auto"
       >
         <i className="fa-solid fa-house text-4xl text-blue-500"></i>
-        戸建住宅
+        <span className="text-lg mr-[40px] md:mr-[-0px]">戸建住宅</span>
       </Button>
       <Modal
         open={open}
