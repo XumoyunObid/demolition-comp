@@ -24,27 +24,29 @@ const LocationModal = ({ setLocationFilled }) => {
   const findLocation = async () => {
     try {
       const res = await axios.get(
-        `https://nominatim.openstreetmap.org/search?q=${location}&format=json&limit=1`
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyBgR1cwD4FPz094syf6m8Wy-uqMbFEXI7s`
       );
-      if (res.data.length > 0) {
-        const { lat, lon } = res.data[0];
-        const coordinates = { lat: parseFloat(lat), lng: parseFloat(lon) };
+      if (res.data.results.length > 0) {
+        const { lat, lng } = res.data.results[0].geometry.location;
+        const coordinates = { lat, lng };
         setCoordinates(coordinates);
-        setMapVisible(true); // Show the map once location is found
-
-        // Dispatch the selected location and coordinates to Redux
+        setMapVisible(true);
+  
         dispatch(setLocationData({ location, coordinates }));
-        setLocationFilled(true); // Mark the location as filled, enabling the "Next" button
+        setLocationFilled(true);
       } else {
         alert("Location not found!");
-        setLocationFilled(false); // Disable the "Next" button
+        setLocationFilled(false);
       }
     } catch (error) {
       console.error("Error fetching location:", error);
-      alert("Something went wrong. Please try again.");
-      setLocationFilled(false); // Disable the "Next" button
+      alert("Network error: Please check your internet connection or try again later.");
+      setLocationFilled(false);
     }
   };
+  
+  
+  
 
   // Reset when location is empty
   useEffect(() => {

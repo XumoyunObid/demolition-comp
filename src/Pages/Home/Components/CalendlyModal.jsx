@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, DatePicker, message, Radio } from "antd";
-import { useDispatch } from "react-redux";
-import { setAppointmentDate } from "../../../Redux/Slices/FormSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setAppointmentDate, addBookedAppointment, selectBookedAppointments } from "../../../Redux/Slices/FormSlice";
 
 const DateTimePickerModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const dispatch = useDispatch();
+  const bookedAppointments = useSelector(selectBookedAppointments);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -35,9 +36,18 @@ const DateTimePickerModal = () => {
   const onConfirmAppointment = () => {
     if (selectedDate && selectedTimeSlot) {
       const appointment = `${selectedDate} from ${selectedTimeSlot}`;
-      dispatch(setAppointmentDate(appointment));
-      message.success(`Appointment confirmed for ${appointment}`);
-      setIsModalVisible(false);
+      // Check if the appointment is already booked
+      const isBooked = bookedAppointments.some(
+        (apt) => apt === appointment
+      );
+      if (isBooked) {
+        message.error("This appointment slot is already booked. Please choose another.");
+      } else {
+        dispatch(setAppointmentDate(appointment));
+        dispatch(addBookedAppointment(appointment)); // Add appointment to booked list
+        message.success(`Appointment confirmed for ${appointment}`);
+        setIsModalVisible(false);
+      }
     } else {
       message.error("Please select both a date and time slot.");
     }

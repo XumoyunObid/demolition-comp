@@ -14,6 +14,7 @@ const initialState = {
   },
   buildingType: '',
   selectedDate: null,
+  bookedAppointments: [], // New state to hold booked appointments
 };
 
 const formSlice = createSlice({
@@ -44,8 +45,11 @@ const formSlice = createSlice({
     setSelectedButton(state, action) {
       state.buildingType = action.payload;
     },
-    setAppointmentDate: (state, action) => {
+    setAppointmentDate(state, action) {
       state.selectedDate = action.payload;
+    },
+    addBookedAppointment(state, action) { // New action to add booked appointments
+      state.bookedAppointments.push(action.payload);
     },
   },
 });
@@ -58,9 +62,11 @@ export const {
   setLocationData,
   setContact,
   setSelectedButton,
-  setAppointmentDate
+  setAppointmentDate,
+  addBookedAppointment, // Export the new action
 } = formSlice.actions;
 
 export const selectAppointmentDate = (state) => state.form.selectedDate;
+export const selectBookedAppointments = (state) => state.form.bookedAppointments; // Selector for booked appointments
 
 export default formSlice.reducer;
