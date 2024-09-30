@@ -87,19 +87,23 @@ const MainModal = () => {
       },
       body: JSON.stringify(smsData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.text(); // If not JSON, return the response as text
+        }
+      })
       .then((data) => {
-        if (data.success) {
+        if (typeof data === "string") {
+          console.error("Error sending SMS:", data); // This will log the error page HTML
+        } else {
           console.log("SMS sent successfully:", data);
           toast.success("SMS sent successfully!");
-        } else {
-          console.error("Error sending SMS:", data.error);
-          toast.error("Failed to send SMS.");
         }
       })
       .catch((error) => {
         console.error("Error sending SMS:", error);
-        toast.error("Failed to send SMS.");
       });
   };
   
