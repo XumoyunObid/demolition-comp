@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, DatePicker, message, Radio } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { setAppointmentDate, addBookedAppointment, selectBookedAppointments } from "../../../Redux/Slices/FormSlice";
+import {
+  setAppointmentDate,
+  addBookedAppointment,
+  selectBookedAppointments,
+} from "../../../Redux/Slices/FormSlice";
 
 const DateTimePickerModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -37,14 +41,16 @@ const DateTimePickerModal = () => {
     if (selectedDate && selectedTimeSlot) {
       const appointment = `${selectedDate} from ${selectedTimeSlot}`;
       // Check if the appointment is already booked
-      const isBooked = bookedAppointments.some(
-        (apt) => apt === appointment
-      );
+      const isBooked = bookedAppointments.some((apt) => apt === appointment);
       if (isBooked) {
         message.error("This appointment slot is already booked. Please choose another.");
       } else {
         dispatch(setAppointmentDate(appointment));
         dispatch(addBookedAppointment(appointment)); // Add appointment to booked list
+
+        // Save to local storage
+        localStorage.setItem("bookedAppointments", JSON.stringify([...bookedAppointments, appointment]));
+        
         message.success(`Appointment confirmed for ${appointment}`);
         setIsModalVisible(false);
       }
@@ -59,6 +65,17 @@ const DateTimePickerModal = () => {
     "14:00 - 16:00",
     "16:00 - 18:00",
   ];
+
+  // Load booked appointments from local storage when component mounts
+  useEffect(() => {
+    const savedAppointments = localStorage.getItem("bookedAppointments");
+    if (savedAppointments) {
+      const parsedAppointments = JSON.parse(savedAppointments);
+      parsedAppointments.forEach((appointment) => {
+        dispatch(addBookedAppointment(appointment)); // Add to Redux state
+      });
+    }
+  }, [dispatch]);
 
   return (
     <div>
