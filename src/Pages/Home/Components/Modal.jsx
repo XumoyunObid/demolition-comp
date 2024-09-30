@@ -80,7 +80,7 @@ const MainModal = () => {
       appointmentDate: "2024-10-01", // Replace with the actual appointment date
     };
   
-    fetch("https://shikkari-kaitai.jp/.netlify/functions/send-sms", {
+    fetch("https://newservice-7652.twil.io/path_1", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

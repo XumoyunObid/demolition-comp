@@ -6,7 +6,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
 
 exports.handler = async (event, context) => {
-  const { phone, name, appointmentDate } = JSON.parse(event.body);
+  const { phone, appointmentDate } = JSON.parse(event.body);
 
   try {
     // Send SMS using the content template
