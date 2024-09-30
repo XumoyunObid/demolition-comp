@@ -22,14 +22,10 @@ const Header = () => {
       <div className="container flex items-center justify-between py-5">
         <RouterLink to="/" className="flex items-center">
           {/* <img className="w-[120px]" src={logo} alt="" /> */}
-          <i className="fa-solid fa-w text-3xl"></i>
+          <p className="text-3xl">SH</p>{" "}
+          <i className="fa-solid fa-vihara text-3xl"></i>
         </RouterLink>
         <ul className="lg:flex items-center gap-6 hidden">
-          <li className="hover:underline">
-            <button onClick={handleToContact} className="text-lg">
-              Contact us
-            </button>
-          </li>
           <li className="hover:underline">
             <Link
               to="about-us"
@@ -37,7 +33,17 @@ const Header = () => {
               duration={500}
               className="text-lg cursor-pointer"
             >
-              About Us
+              我々について
+            </Link>
+          </li>
+          <li className="hover:underline">
+            <Link
+              to="contact-us"
+              smooth={true}
+              duration={500}
+              className="text-lg cursor-pointer"
+            >
+              お問い合わせ
             </Link>
           </li>
         </ul>

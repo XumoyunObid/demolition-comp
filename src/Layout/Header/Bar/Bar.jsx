@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { Button, Drawer } from "antd";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-scroll";
+
 const App = () => {
   const [open, setOpen] = useState(false);
+  
   const showDrawer = () => {
     setOpen(true);
   };
+
   const onClose = () => {
     setOpen(false);
   };
+
   return (
     <>
       <Button type="default" onClick={showDrawer} className="ml-[220px]">
@@ -16,29 +20,37 @@ const App = () => {
       </Button>
       <Drawer onClose={onClose} open={open}>
         <div className="flex flex-col items-start justify-between gap-[200px]">
-          <ul className=" flex flex-col">
+          <ul className="flex flex-col">
             <li className="py-3 focus:bg-gray-100">
-              <NavLink to="/" className="flex items-center gap-3 text-lg">
-                <i className="fa-solid fa-home text-lg"></i> ホーム
-              </NavLink>
+              <Link
+                to="/"
+                className="flex items-center gap-3 text-lg font-bold"
+                onClick={onClose}
+              >
+                ホーム
+              </Link>
             </li>
             <li className="py-3 focus:bg-gray-100">
-              <NavLink
-                to="/service-list"
-                className="flex items-center gap-3 text-lg"
+              <Link
+                to="about-us"
+                smooth={true}
+                duration={500}
+                className="text-lg cursor-pointer font-bold"
+                onClick={onClose} 
               >
-                <i className="fa-solid fa-phone text-lg"></i> コンタクト
-              </NavLink>
+                我々について
+              </Link>
             </li>
             <li className="py-3 focus:bg-gray-100">
-              <NavLink
-                to="/for-business"
-                className="flex items-center gap-3 text-lg"
+              <Link
+                to="contact-us"
+                smooth={true}
+                duration={500}
+                className="text-lg cursor-pointer font-bold"
+                onClick={onClose}
               >
-                <i className="fa-solid fa-paperclip text-lg"></i>
-                {" "}
-                私たちについて
-              </NavLink>
+                お問い合わせ
+              </Link>
             </li>
           </ul>
         </div>
@@ -46,4 +58,5 @@ const App = () => {
     </>
   );
 };
+
 export default App;
