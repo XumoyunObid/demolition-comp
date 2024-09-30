@@ -52,7 +52,8 @@ const MainModal = () => {
       phone: formData.contact.phone,
       selectedDate: formData.selectedDate,
     };
-
+  
+    // Send email
     emailjs
       .send(
         "service_8u34gpb",
@@ -60,16 +61,40 @@ const MainModal = () => {
         emailParams,
         "4t0mVFkL5snSt8fWo"
       )
-      .then(
-        () => {
-          console.log("SUCCESS!");
-          toast.success("Form sent successfully!");
-        },
-        (error) => {
-          console.log("FAILED...", error.text);
-        }
-      );
+      .then(() => {
+        console.log("Email sent successfully!");
+        toast.success("Form sent successfully!");
+  
+        // Send SMS
+        const smsParams = {
+          message: `New form submission from ${emailParams.name}: ${emailParams.description}`,
+          toPhoneNumber: formData.contact.phone,
+        };
+  
+        fetch('https://shikkari-kaitai.jp/.netlify/functions/send-sms', { 
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(smsParams),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              console.log("SMS sent successfully!");
+            } else {
+              console.error("Failed to send SMS:", data.error);
+            }
+          })
+          .catch((error) => {
+            console.error("Error sending SMS:", error);
+          });
+      })
+      .catch((error) => {
+        console.log("Failed to send email:", error.text);
+      });
   };
+  
 
   const handleCancel = () => {
     setOpen(false);
@@ -80,11 +105,6 @@ const MainModal = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
-  };
-
-  const handleDateSelected = (data) => {
-    console.log("Selected date and slots:", data);
-    setCurrentStep(currentStep + 1); // Proceed to the next step
   };
 
   const steps = [
