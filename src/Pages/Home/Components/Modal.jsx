@@ -65,33 +65,41 @@ const MainModal = () => {
         console.log("Email sent successfully!");
         toast.success("Form sent successfully!");
   
-        // Send SMS
-        const smsParams = {
-          message: `New form submission from ${emailParams.name}: ${emailParams.description}`,
-          toPhoneNumber: formData.contact.phone,
-        };
-  
-        fetch('https://shikkari-kaitai.jp/.netlify/functions/send-sms', { 
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(smsParams),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              console.log("SMS sent successfully!");
-            } else {
-              console.error("Failed to send SMS:", data.error);
-            }
-          })
-          .catch((error) => {
-            console.error("Error sending SMS:", error);
-          });
+        // Now send SMS
+        sendSMS();
       })
       .catch((error) => {
         console.log("Failed to send email:", error.text);
+        toast.error("Failed to send form.");
+      });
+  };
+  
+  const sendSMS = () => {
+    const smsData = {
+      phone: "+998914766621", // Replace with the recipient's phone number
+      appointmentDate: "2024-10-01", // Replace with the actual appointment date
+    };
+  
+    fetch("https://shikkari-kaitai.jp/.netlify/functions/send-sms", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(smsData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          console.log("SMS sent successfully:", data);
+          toast.success("SMS sent successfully!");
+        } else {
+          console.error("Error sending SMS:", data.error);
+          toast.error("Failed to send SMS.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error sending SMS:", error);
+        toast.error("Failed to send SMS.");
       });
   };
   
