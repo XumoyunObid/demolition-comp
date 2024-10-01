@@ -55,15 +55,15 @@ const MainModal = () => {
 
     emailjs
       .send(
-        "service_8u34gpb",
-        "template_smgqomh",
+        "service_73nh1rx",
+        "template_j46puj2",
         emailParams,
-        "4t0mVFkL5snSt8fWo"
+        "gs69g3gQ1UqjRMNeU"
       )
       .then(
         () => {
           console.log("SUCCESS!");
-          toast.success("Form sent successfully!");
+          toast.success("メッセージは正常に送信されました！");
         },
         (error) => {
           console.log("FAILED...", error.text);
@@ -141,11 +141,10 @@ const MainModal = () => {
       <CustomerModal setContactFilled={setContactFilled} />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">Calendar</h1>
+      <h1 className="text-xl font-bold text-blue-500">予約をする</h1>
       <GoogleCalendarModal />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">Confirm</h1>
       <ConfirmModal />
     </div>,
   ];

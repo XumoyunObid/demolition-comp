@@ -29,7 +29,7 @@ const DateTimePickerModal = () => {
       setSelectedDate(dateString);
     } else {
       setSelectedDate(null);
-      setSelectedTimeSlot(null); // Reset time slot if date is cleared
+      setSelectedTimeSlot(null); 
     }
   };
 
@@ -39,23 +39,21 @@ const DateTimePickerModal = () => {
 
   const onConfirmAppointment = () => {
     if (selectedDate && selectedTimeSlot) {
-      const appointment = `${selectedDate} from ${selectedTimeSlot}`;
-      // Check if the appointment is already booked
+      const appointment = `${selectedDate} から ${selectedTimeSlot}`;
       const isBooked = bookedAppointments.some((apt) => apt === appointment);
       if (isBooked) {
-        message.error("This appointment slot is already booked. Please choose another.");
+        message.error("この予約枠はすでに予約されています。別の時間を選択してください。");
       } else {
         dispatch(setAppointmentDate(appointment));
-        dispatch(addBookedAppointment(appointment)); // Add appointment to booked list
+        dispatch(addBookedAppointment(appointment)); 
 
-        // Save to local storage
         localStorage.setItem("bookedAppointments", JSON.stringify([...bookedAppointments, appointment]));
         
-        message.success(`Appointment confirmed for ${appointment}`);
+        message.success(`予約が以下の日程で確認されました: ${appointment}`);
         setIsModalVisible(false);
       }
     } else {
-      message.error("Please select both a date and time slot.");
+      message.error("日付と時間枠の両方を選択してください。");
     }
   };
 
@@ -66,13 +64,12 @@ const DateTimePickerModal = () => {
     "16:00 - 18:00",
   ];
 
-  // Load booked appointments from local storage when component mounts
   useEffect(() => {
     const savedAppointments = localStorage.getItem("bookedAppointments");
     if (savedAppointments) {
       const parsedAppointments = JSON.parse(savedAppointments);
       parsedAppointments.forEach((appointment) => {
-        dispatch(addBookedAppointment(appointment)); // Add to Redux state
+        dispatch(addBookedAppointment(appointment)); 
       });
     }
   }, [dispatch]);
@@ -80,10 +77,10 @@ const DateTimePickerModal = () => {
   return (
     <div>
       <Button type="primary" onClick={showModal}>
-        Schedule Appointment
+      予約
       </Button>
       <Modal
-        title="Schedule an Appointment"
+        title="予約"
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
@@ -95,7 +92,6 @@ const DateTimePickerModal = () => {
           style={{ width: "100%", marginBottom: 20 }}
         />
         
-        {/* Render time slots only if a date is selected */}
         {selectedDate && (
           <Radio.Group
             onChange={onTimeSlotChange}
@@ -122,15 +118,15 @@ const DateTimePickerModal = () => {
         <Button
           type="primary"
           onClick={onConfirmAppointment}
-          disabled={!selectedDate || !selectedTimeSlot} // Disable button if date or time slot is not selected
+          disabled={!selectedDate || !selectedTimeSlot} 
         >
-          Confirm Appointment
+          任命の確認
         </Button>
       </Modal>
 
       {selectedDate && selectedTimeSlot && (
         <div style={{ marginTop: 20 }}>
-          <strong>Selected Date and Time Slot:</strong> {`${selectedDate} from ${selectedTimeSlot}`}
+          <strong>選択した日時：</strong> {`${selectedDate} から ${selectedTimeSlot}`}
         </div>
       )}
     </div>

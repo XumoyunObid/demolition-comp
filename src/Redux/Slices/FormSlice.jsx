@@ -4,7 +4,7 @@ const initialState = {
   year: '不明',
   startDate: '未定',
   workDetails: 'その他',
-  description: 'No description...',
+  description: '記述なし...',
   location: '',
   contact: {
     firstName: '',
@@ -14,7 +14,7 @@ const initialState = {
   },
   buildingType: '',
   selectedDate: null,
-  bookedAppointments: [], // New state to hold booked appointments
+  bookedAppointments: [], 
 };
 
 const formSlice = createSlice({
@@ -48,7 +48,7 @@ const formSlice = createSlice({
     setAppointmentDate(state, action) {
       state.selectedDate = action.payload;
     },
-    addBookedAppointment(state, action) { // New action to add booked appointments
+    addBookedAppointment(state, action) { 
       state.bookedAppointments.push(action.payload);
     },
   },
@@ -63,10 +63,10 @@ export const {
   setContact,
   setSelectedButton,
   setAppointmentDate,
-  addBookedAppointment, // Export the new action
+  addBookedAppointment, 
 } = formSlice.actions;
 
 export const selectAppointmentDate = (state) => state.form.selectedDate;
-export const selectBookedAppointments = (state) => state.form.bookedAppointments; // Selector for booked appointments
+export const selectBookedAppointments = (state) => state.form.bookedAppointments; 
 
 export default formSlice.reducer;

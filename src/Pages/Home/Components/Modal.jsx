@@ -52,19 +52,19 @@ const MainModal = () => {
       phone: formData.contact.phone,
       selectedDate: formData.selectedDate,
     };
-  
+
     // Send email
     emailjs
       .send(
-        "service_8u34gpb",
-        "template_smgqomh",
+        "service_73nh1rx",
+        "template_j46puj2",
         emailParams,
-        "4t0mVFkL5snSt8fWo"
+        "gs69g3gQ1UqjRMNeU"
       )
       .then(() => {
-        console.log("Email sent successfully!");
-        toast.success("Form sent successfully!");
-  
+        console.log("メッセージは正常に送信されました！");
+        toast.success("メッセージは正常に送信されました！");
+
         // Now send SMS
         sendSMS();
       })
@@ -73,13 +73,13 @@ const MainModal = () => {
         toast.error("Failed to send form.");
       });
   };
-  
+
   const sendSMS = () => {
     const smsData = {
       phone: "+998914766621", // Replace with the recipient's phone number
       appointmentDate: "2024-10-01", // Replace with the actual appointment date
     };
-  
+
     fetch("https://newservice-7652.twil.io/path_1", {
       method: "POST",
       headers: {
@@ -106,7 +106,6 @@ const MainModal = () => {
         console.error("Error sending SMS:", error);
       });
   };
-  
 
   const handleCancel = () => {
     setOpen(false);
@@ -173,11 +172,10 @@ const MainModal = () => {
       <CustomerModal setContactFilled={setContactFilled} />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">Calendar</h1>
+      <h1 className="text-xl font-bold text-blue-500">予約をする</h1>
       <GoogleCalendarModal />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">Confirm</h1>
       <ConfirmModal />
     </div>,
   ];
