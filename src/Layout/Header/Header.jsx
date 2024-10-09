@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-scroll";
 import Bar from "./Bar/Bar";
+import logo from '/logo.svg'
 
 const Header = () => {
   const [show, setShow] = useState(false);
@@ -19,11 +20,9 @@ const Header = () => {
 
   return (
     <div>
-      <div className="container flex items-center justify-between py-5">
+      <div className="container flex items-center justify-between py-2">
         <RouterLink to="/" className="flex items-center">
-          {/* <img className="w-[120px]" src={logo} alt="" /> */}
-          <p className="text-3xl">SH</p>{" "}
-          <i className="fa-solid fa-vihara text-3xl"></i>
+          <img className="w-[60px]" src={logo} alt="" />
         </RouterLink>
         <ul className="lg:flex items-center gap-6 hidden">
           <li className="hover:underline">
