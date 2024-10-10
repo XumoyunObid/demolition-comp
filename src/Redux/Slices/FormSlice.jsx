@@ -51,6 +51,11 @@ const formSlice = createSlice({
     addBookedAppointment(state, action) { 
       state.bookedAppointments.push(action.payload);
     },
+    removeBookedAppointment(state, action) { 
+      state.bookedAppointments = state.bookedAppointments.filter(
+        (appointment) => appointment !== action.payload
+      );
+    },
   },
 });
 
@@ -63,10 +68,11 @@ export const {
   setContact,
   setSelectedButton,
   setAppointmentDate,
-  addBookedAppointment, 
+  addBookedAppointment,
+  removeBookedAppointment, // Added the removeBookedAppointment action
 } = formSlice.actions;
 
 export const selectAppointmentDate = (state) => state.form.selectedDate;
-export const selectBookedAppointments = (state) => state.form.bookedAppointments; 
+export const selectBookedAppointments = (state) => state.form.bookedAppointments;
 
 export default formSlice.reducer;

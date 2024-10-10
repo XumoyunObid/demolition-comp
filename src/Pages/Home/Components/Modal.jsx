@@ -9,8 +9,8 @@ import CustomerModal from "./CustomerModal";
 import ConfirmModal from "./ConfirmModal";
 import GoogleCalendarModal from "./CalendlyModal";
 import { useSelector } from "react-redux";
-import emailjs from "emailjs-com";
 import { toast } from "react-toastify";
+import useSendEmail from "../../Services/Mutation/useSendEmail";
 
 const MainModal = () => {
   const [loading, setLoading] = useState(false);
@@ -20,91 +20,44 @@ const MainModal = () => {
   const [contactFilled, setContactFilled] = useState(false);
 
   const formData = useSelector((state) => state.form);
+  const { mutate: sendEmail } = useSendEmail();
 
   const showModal = () => {
     setOpen(true);
   };
+
+  const constructEmailBody = () => {
+    return `
+  建物の種類:        ${formData.buildingType},
+  年:               ${formData.year},
+  開始日:          ${formData.startDate},
+  作業内容:        ${formData.workDetails},
+  説明:            ${formData.description},
+  場所:            ${formData.location.location},
+  顧客名:         ${formData.contact.firstName} ${formData.contact.lastName},
+  メール:          ${formData.contact.email},
+  電話番号:       ${formData.contact.phone},
+  予約日:         ${formData.selectedDate}
+  `;
+  };
+  
 
   const handleOk = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       setLoading(true);
-      sendEmail();
+      sendEmail({
+        email: "obidjonov06122005@gmail.com",
+        description: constructEmailBody(), 
+      });
       setTimeout(() => {
         setLoading(false);
         setOpen(false);
         setCurrentStep(0);
       }, 3000);
+      toast.success("メールアドレスが正常に送信されました！")
     }
-  };
-
-  const sendEmail = () => {
-    const emailParams = {
-      buildingType: formData.buildingType,
-      buildingAge: formData.year,
-      startDate: formData.startDate,
-      workDetails: formData.workDetails,
-      description: formData.description,
-      location: formData.location.location,
-      name: `${formData.contact.firstName} ${formData.contact.lastName}`,
-      email: formData.contact.email,
-      phone: formData.contact.phone,
-      selectedDate: formData.selectedDate,
-    };
-
-    // Send email
-    emailjs
-      .send(
-        "service_73nh1rx",
-        "template_j46puj2",
-        emailParams,
-        "gs69g3gQ1UqjRMNeU"
-      )
-      .then(() => {
-        console.log("メッセージは正常に送信されました！");
-        toast.success("メッセージは正常に送信されました！");
-
-        // Now send SMS
-        sendSMS();
-      })
-      .catch((error) => {
-        console.log("Failed to send email:", error.text);
-        toast.error("Failed to send form.");
-      });
-  };
-
-  const sendSMS = () => {
-    const smsData = {
-      phone: "+998914766621", // Replace with the recipient's phone number
-      appointmentDate: "2024-10-01", // Replace with the actual appointment date
-    };
-
-    fetch("https://newservice-7652.twil.io/path_1", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(smsData),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          return response.text(); // If not JSON, return the response as text
-        }
-      })
-      .then((data) => {
-        if (typeof data === "string") {
-          console.error("Error sending SMS:", data); // This will log the error page HTML
-        } else {
-          console.log("SMS sent successfully:", data);
-          toast.success("SMS sent successfully!");
-        }
-      })
-      .catch((error) => {
-        console.error("Error sending SMS:", error);
-      });
   };
 
   const handleCancel = () => {
@@ -128,49 +81,49 @@ const MainModal = () => {
       </p>
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[400px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">築何年ですか？</h1>
-      <YearModal />
-    </div>,
-    <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">
-        いつ頃工事を始めたいですか？
-      </h1>
-      <StartDateModal />
-    </div>,
-    <div className="py-[50px] md:w-450px flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">
-        解体工事の内容を教えてください
-      </h1>
-      <WorkModal />
-    </div>,
-    <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">
-        その他、事業者に伝えたい事はありますか？{" "}
-        <Button type="default" disabled className="font-bold">
-          任意
-        </Button>
-      </h1>
-      <h2 className="">
-        詳しい内容を書くことで、ぴったりのプロが見つかりやすくなります。
-      </h2>
-      <br />
-      <AdditionalModal />
-    </div>,
-    <div className="py-[50px] md:w-450px flex flex-col gap-5 items-center h-[450px] overflow-y-auto">
-      <h1 className="text-xl font-bold text-blue-500">
-        解体工事の内容を教えてください
-      </h1>
-      <h2 className="pl-[10px]">
-        郵便番号・駅名もしくは市区町村までご入力いただくと、更に条件に合ったプロが見つかります。
-      </h2>
-      <LocationModal setLocationFilled={setLocationFilled} />
-    </div>,
-    <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">
-        お客様情報を入力してください
-      </h1>
-      <CustomerModal setContactFilled={setContactFilled} />
-    </div>,
+    <h1 className="text-xl font-bold text-blue-500">築何年ですか？</h1>
+    <YearModal />
+  </div>,
+  <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
+    <h1 className="text-xl font-bold text-blue-500">
+      いつ頃工事を始めたいですか？
+    </h1>
+    <StartDateModal />
+  </div>,
+  <div className="py-[50px] md:w-450px flex flex-col gap-5 items-center h-[450px] justify-center">
+    <h1 className="text-xl font-bold text-blue-500">
+      解体工事の内容を教えてください
+    </h1>
+    <WorkModal />
+  </div>,
+  <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
+    <h1 className="text-xl font-bold text-blue-500">
+      その他、事業者に伝えたい事はありますか？{" "}
+      <Button type="default" disabled className="font-bold">
+        任意
+      </Button>
+    </h1>
+    <h2 className="">
+      詳しい内容を書くことで、ぴったりのプロが見つかりやすくなります。
+    </h2>
+    <br />
+    <AdditionalModal />
+  </div>,
+  <div className="py-[50px] md:w-450px flex flex-col gap-5 items-center h-[450px] overflow-y-auto">
+    <h1 className="text-xl font-bold text-blue-500">
+      解体工事の内容を教えてください
+    </h1>
+    <h2 className="pl-[10px]">
+      郵便番号・駅名もしくは市区町村までご入力いただくと、更に条件に合ったプロが見つかります。
+    </h2>
+    <LocationModal setLocationFilled={setLocationFilled} />
+  </div>,
+  <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
+    <h1 className="text-xl font-bold text-blue-500">
+      お客様情報を入力してください
+    </h1>
+    <CustomerModal setContactFilled={setContactFilled} />
+  </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
       <h1 className="text-xl font-bold text-blue-500">予約をする</h1>
       <GoogleCalendarModal />

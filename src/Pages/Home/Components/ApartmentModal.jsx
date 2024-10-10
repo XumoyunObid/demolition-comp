@@ -9,8 +9,8 @@ import CustomerModal from "./CustomerModal";
 import ConfirmModal from "./ConfirmModal";
 import GoogleCalendarModal from "./CalendlyModal";
 import { useSelector } from "react-redux";
-import emailjs from "emailjs-com";
 import { toast } from "react-toastify";
+import useSendEmail from "../../Services/Mutation/useSendEmail";
 
 const MainModal = () => {
   const [loading, setLoading] = useState(false);
@@ -20,55 +20,44 @@ const MainModal = () => {
   const [contactFilled, setContactFilled] = useState(false);
 
   const formData = useSelector((state) => state.form);
+  const { mutate: sendEmail } = useSendEmail();
 
   const showModal = () => {
     setOpen(true);
   };
+
+  const constructEmailBody = () => {
+    return `
+  建物の種類:        ${formData.buildingType},
+  年:               ${formData.year},
+  開始日:          ${formData.startDate},
+  作業内容:        ${formData.workDetails},
+  説明:            ${formData.description},
+  場所:            ${formData.location.location},
+  顧客名:         ${formData.contact.firstName} ${formData.contact.lastName},
+  メール:          ${formData.contact.email},
+  電話番号:       ${formData.contact.phone},
+  予約日:         ${formData.selectedDate}
+  `;
+  };
+  
 
   const handleOk = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       setLoading(true);
-      sendEmail();
+      sendEmail({
+        email: "obidjonov06122005@gmail.com",
+        description: constructEmailBody(), 
+      });
       setTimeout(() => {
         setLoading(false);
         setOpen(false);
         setCurrentStep(0);
       }, 3000);
+      toast.success("メールアドレスが正常に送信されました！")
     }
-  };
-
-  const sendEmail = () => {
-    const emailParams = {
-      buildingType: formData.buildingType,
-      buildingAge: formData.year,
-      startDate: formData.startDate,
-      workDetails: formData.workDetails,
-      description: formData.description,
-      location: formData.location.location,
-      name: `${formData.contact.firstName} ${formData.contact.lastName}`,
-      email: formData.contact.email,
-      phone: formData.contact.phone,
-      selectedDate: formData.selectedDate,
-    };
-
-    emailjs
-      .send(
-        "service_73nh1rx",
-        "template_j46puj2",
-        emailParams,
-        "gs69g3gQ1UqjRMNeU"
-      )
-      .then(
-        () => {
-          console.log("SUCCESS!");
-          toast.success("メッセージは正常に送信されました！");
-        },
-        (error) => {
-          console.log("FAILED...", error.text);
-        }
-      );
   };
 
   const handleCancel = () => {

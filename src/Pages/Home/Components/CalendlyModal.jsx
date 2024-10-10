@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button, DatePicker, message, Radio } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,6 +6,8 @@ import {
   addBookedAppointment,
   selectBookedAppointments,
 } from "../../../Redux/Slices/FormSlice";
+import usePostdate from "../../Services/Mutation/usePostdate";
+import useGetdates from "../../Services/Queries/useGetdates";
 
 const DateTimePickerModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -13,6 +15,8 @@ const DateTimePickerModal = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const dispatch = useDispatch();
   const bookedAppointments = useSelector(selectBookedAppointments);
+  const { data: bookedDates } = useGetdates(); // Fetched booked appointments from the backend
+  const { mutate: postMutate } = usePostdate();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -25,12 +29,8 @@ const DateTimePickerModal = () => {
   };
 
   const onDateChange = (date, dateString) => {
-    if (date) {
-      setSelectedDate(dateString);
-    } else {
-      setSelectedDate(null);
-      setSelectedTimeSlot(null); 
-    }
+    setSelectedDate(dateString);
+    setSelectedTimeSlot(null); // Reset the selected time slot when a new date is selected
   };
 
   const onTimeSlotChange = (e) => {
@@ -39,24 +39,48 @@ const DateTimePickerModal = () => {
 
   const onConfirmAppointment = () => {
     if (selectedDate && selectedTimeSlot) {
-      const appointment = `${selectedDate} から ${selectedTimeSlot}`;
-      const isBooked = bookedAppointments.some((apt) => apt === appointment);
-      if (isBooked) {
-        message.error("この予約枠はすでに予約されています。別の時間を選択してください。");
-      } else {
-        dispatch(setAppointmentDate(appointment));
-        dispatch(addBookedAppointment(appointment)); 
+      const formattedDate = String(selectedDate);
+      const formattedTimeSlot = String(selectedTimeSlot);
+      const newAppointment = `${formattedDate} から ${formattedTimeSlot}`;
 
-        localStorage.setItem("bookedAppointments", JSON.stringify([...bookedAppointments, appointment]));
-        
-        message.success(`予約が以下の日程で確認されました: ${appointment}`);
-        setIsModalVisible(false);
+      // Check if the new time slot is already booked
+      const isBooked = bookedAppointments.some((apt) => apt === newAppointment);
+      if (isBooked) {
+        message.error(
+          "この予約枠はすでに予約されています。別の時間を選択してください。"
+        );
+      } else {
+        // Dispatch the new appointment and save it in localStorage
+        dispatch(setAppointmentDate(newAppointment));
+        dispatch(addBookedAppointment(newAppointment));
+
+        localStorage.setItem(
+          "bookedAppointments",
+          JSON.stringify([newAppointment]) // Save only the new appointment
+        );
+
+        // Send the new appointment to the backend
+        postMutate(
+          { date: formattedDate, time: formattedTimeSlot },
+          {
+            onSuccess: () => {
+              message.success(
+                `予約が以下の日程で確認されました: ${newAppointment}`
+              );
+              setIsModalVisible(false);
+            },
+            onError: (error) => {
+              message.error(`エラーが発生しました: ${error.message}`);
+            },
+          }
+        );
       }
     } else {
       message.error("日付と時間枠の両方を選択してください。");
     }
   };
 
+  // Define available time slots
   const timeSlots = [
     "09:00 - 12:00",
     "12:00 - 14:00",
@@ -64,20 +88,17 @@ const DateTimePickerModal = () => {
     "16:00 - 18:00",
   ];
 
-  useEffect(() => {
-    const savedAppointments = localStorage.getItem("bookedAppointments");
-    if (savedAppointments) {
-      const parsedAppointments = JSON.parse(savedAppointments);
-      parsedAppointments.forEach((appointment) => {
-        dispatch(addBookedAppointment(appointment)); 
-      });
-    }
-  }, [dispatch]);
+  // Function to check if a time slot is already booked for the selected date
+  const isTimeSlotBooked = (timeSlot) => {
+    return bookedDates?.some(
+      (appointment) => appointment.date === selectedDate && appointment.time === timeSlot
+    );
+  };
 
   return (
     <div>
       <Button type="primary" onClick={showModal}>
-      予約
+        予約
       </Button>
       <Modal
         title="予約"
@@ -91,7 +112,7 @@ const DateTimePickerModal = () => {
           format="YYYY-MM-DD"
           style={{ width: "100%", marginBottom: 20 }}
         />
-        
+
         {selectedDate && (
           <Radio.Group
             onChange={onTimeSlotChange}
@@ -102,6 +123,7 @@ const DateTimePickerModal = () => {
               <Radio.Button
                 key={slot}
                 value={slot}
+                disabled={isTimeSlotBooked(slot)} // Disable already booked slots
                 style={{
                   display: "block",
                   marginBottom: 10,
@@ -114,11 +136,11 @@ const DateTimePickerModal = () => {
             ))}
           </Radio.Group>
         )}
-        
+
         <Button
           type="primary"
           onClick={onConfirmAppointment}
-          disabled={!selectedDate || !selectedTimeSlot} 
+          disabled={!selectedDate || !selectedTimeSlot}
         >
           任命の確認
         </Button>
@@ -126,7 +148,8 @@ const DateTimePickerModal = () => {
 
       {selectedDate && selectedTimeSlot && (
         <div style={{ marginTop: 20 }}>
-          <strong>選択した日時：</strong> {`${selectedDate} から ${selectedTimeSlot}`}
+          <strong>選択した日時：</strong>{" "}
+          {`${selectedDate} から ${selectedTimeSlot}`}
         </div>
       )}
     </div>
