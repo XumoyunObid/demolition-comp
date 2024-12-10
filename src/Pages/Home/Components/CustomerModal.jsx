@@ -6,18 +6,16 @@ const CustomerModal = ({ setContactFilled }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState(''); // Optional field
+  const [phone, setPhone] = useState(''); 
 
   const dispatch = useDispatch();
 
-  // Function to update the Redux store and local state
   const handleInputChange = (field, value) => {
     if (field === 'firstName') setFirstName(value);
     if (field === 'lastName') setLastName(value);
     if (field === 'email') setEmail(value);
     if (field === 'phone') setPhone(value);
 
-    // Update Redux store
     dispatch(
       setContact({
         firstName: field === 'firstName' ? value : firstName,

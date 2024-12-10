@@ -19,8 +19,7 @@ const YearModal = () => {
   const onChange = (e) => {
     const selectedValue = e.target.value;
     setValue(selectedValue);
-    console.log(`Selected option: ${options[selectedValue]}`); // Log the selected text
-    dispatch(setYear(options[selectedValue])); // Dispatch selected option to Redux
+    dispatch(setYear(options[selectedValue]));
   };
 
   return (

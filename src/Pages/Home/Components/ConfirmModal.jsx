@@ -3,8 +3,6 @@ import { useSelector } from "react-redux";
 
 const ConfirmModal = () => {
   const formData = useSelector((state) => state.form);
-
-  console.log(formData);
   return (
     <div>
       <h1 className="text-2xl text-center">レビュー</h1>

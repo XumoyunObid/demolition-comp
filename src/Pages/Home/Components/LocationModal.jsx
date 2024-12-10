@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setLocationData } from "../../../Redux/Slices/FormSlice"; // Import the action to store location data
+import { setLocationData } from "../../../Redux/Slices/FormSlice"; 
 
 const containerStyle = {
   width: "300px",
@@ -10,17 +10,15 @@ const containerStyle = {
 };
 
 const LocationModal = ({ setLocationFilled }) => {
-  const [location, setLocation] = useState(""); // User input location
-  const [coordinates, setCoordinates] = useState(null); // Store the coordinates
-  const [mapVisible, setMapVisible] = useState(false); // Control map visibility
-  const dispatch = useDispatch(); // Initialize Redux dispatch
+  const [location, setLocation] = useState(""); 
+  const [coordinates, setCoordinates] = useState(null); 
+  const [mapVisible, setMapVisible] = useState(false); 
+  const dispatch = useDispatch(); 
 
-  // Google Maps API hook
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyBgR1cwD4FPz094syf6m8Wy-uqMbFEXI7s', // Store your API key in .env
+    googleMapsApiKey: 'AIzaSyBgR1cwD4FPz094syf6m8Wy-uqMbFEXI7s', 
   });
 
-  // Function to handle location search
   const findLocation = async () => {
     try {
       const res = await axios.get(
@@ -48,16 +46,14 @@ const LocationModal = ({ setLocationFilled }) => {
   
   
 
-  // Reset when location is empty
   useEffect(() => {
     if (location === "") {
-      setLocationFilled(false); // Ensure button is disabled if location is empty
+      setLocationFilled(false); 
     }
   }, [location, setLocationFilled]);
 
   return (
     <div className="flex flex-col gap-5">
-      {/* Input for typing location */}
       <div className="flex w-[300px] gap-3">
         <input
           type="text"
@@ -75,14 +71,13 @@ const LocationModal = ({ setLocationFilled }) => {
         </button>
       </div>
 
-      {/* Display Google Map only if isLoaded and coordinates exist */}
       {isLoaded && coordinates && (
         <div className="mt-5">
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={coordinates}
             zoom={12}
-            onUnmount={() => setMapVisible(false)} // Clean up when map is unmounted
+            onUnmount={() => setMapVisible(false)} 
           >
             <Marker position={coordinates} />
           </GoogleMap>

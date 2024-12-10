@@ -14,13 +14,19 @@ const Home = () => {
         <div className="absolute inset-0 bg-white"></div>
         <div className="absolute inset-0 flex flex-col justify-center items-center">
           <div className="flex flex-col gap-10">
-            <h1 className="text-2xl md:text-[50px] text-center text-black mb-8">フォームにご記入ください</h1>
+            <h1 className="text-2xl md:text-[50px] text-center text-black mb-8">
+              フォームにご記入ください
+            </h1>
+            <meta
+              name="Shikkari kaitai"
+              content="ようこそ！私たちは安心で信頼できる解体サービスを提供しています。ぜひ下にスクロールして、フォームにご記入ください。"
+            />
             <PostBanner />
           </div>
         </div>
       </div>
       <AboutUs />
-      <ContactUs/>
+      <ContactUs />
     </div>
   );
 };

@@ -8,7 +8,6 @@ const AdditionalModal = () => {
 
   const handleChange = (e) => {
     const value = e.target.value;
-    console.log(value);
 
     dispatch(setDescription(value));
   };

@@ -80,7 +80,6 @@ const DateTimePickerModal = () => {
     }
   };
 
-  // Define available time slots
   const timeSlots = [
     "09:00 - 12:00",
     "12:00 - 14:00",
@@ -88,7 +87,6 @@ const DateTimePickerModal = () => {
     "16:00 - 18:00",
   ];
 
-  // Function to check if a time slot is already booked for the selected date
   const isTimeSlotBooked = (timeSlot) => {
     return bookedDates?.some(
       (appointment) => appointment.date === selectedDate && appointment.time === timeSlot
@@ -123,7 +121,7 @@ const DateTimePickerModal = () => {
               <Radio.Button
                 key={slot}
                 value={slot}
-                disabled={isTimeSlotBooked(slot)} // Disable already booked slots
+                disabled={isTimeSlotBooked(slot)} 
                 style={{
                   display: "block",
                   marginBottom: 10,

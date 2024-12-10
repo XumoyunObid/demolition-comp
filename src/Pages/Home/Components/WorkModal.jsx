@@ -18,9 +18,6 @@ const WorkModal = () => {
   const onChange = (e) => {
     const selectedValue = e.target.value;
     setValue(selectedValue);
-    console.log(`Selected option: ${options[selectedValue]}`);
-
-    // Dispatch the selected work description to Redux
     dispatch(setWorkDetails(options[selectedValue]));
   };
 

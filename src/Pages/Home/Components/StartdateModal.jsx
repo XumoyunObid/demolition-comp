@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Radio, Space } from "antd";
 import { useDispatch } from "react-redux";
-import { setStartDate } from "../../../Redux/Slices/FormSlice"; // Import the action to store the selected start date
+import { setStartDate } from "../../../Redux/Slices/FormSlice"; 
 
 const StartDateModal = () => {
   const [value, setValue] = useState(7);
-  const dispatch = useDispatch(); // Initialize Redux dispatch
+  const dispatch = useDispatch(); 
 
   const options = {
     1: "可能な限り早く",
@@ -20,9 +20,6 @@ const StartDateModal = () => {
   const onChange = (e) => {
     const selectedValue = e.target.value;
     setValue(selectedValue);
-    console.log(`Selected option: ${options[selectedValue]}`);
-
-    // Dispatch the selected start date to Redux
     dispatch(setStartDate(options[selectedValue]));
   };
 

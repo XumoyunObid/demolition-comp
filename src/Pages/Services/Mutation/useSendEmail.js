@@ -1,13 +1,12 @@
-import React from 'react';
-import { request } from '../../../Config/request'; // Adjust the import if needed
+import { request } from '../../../Config/request';
 import { useMutation } from 'react-query';
 
 const useSendEmail = () => {
   return useMutation({
     mutationKey: 'sendEmail',
-    mutationFn: async ({ email, description }) => {
+    mutationFn: async ({ email, subject, message }) => {
       const response = await request({
-        url: 'http://45.130.148.160:5555/api/emailSenderController',
+        url: 'https://api.shikkari-kaitai.jp/api/emailSenderController',
         method: 'POST',
         headers: {
           'Accept': '*/*',
@@ -15,7 +14,8 @@ const useSendEmail = () => {
         },
         data: {
           email,
-          description,
+          message,
+          subject,
         },
       });
       return response; 
