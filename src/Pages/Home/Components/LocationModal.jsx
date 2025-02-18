@@ -1,56 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import axios from "axios";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setLocationData } from "../../../Redux/Slices/FormSlice"; 
-
-const containerStyle = {
-  width: "300px",
-  height: "250px",
-};
+import { setLocationData } from "../../../Redux/Slices/FormSlice";
 
 const LocationModal = ({ setLocationFilled }) => {
-  const [location, setLocation] = useState(""); 
-  const [coordinates, setCoordinates] = useState(null); 
-  const [mapVisible, setMapVisible] = useState(false); 
-  const dispatch = useDispatch(); 
+  const [location, setLocation] = useState("");
+  const dispatch = useDispatch();
 
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyBgR1cwD4FPz094syf6m8Wy-uqMbFEXI7s', 
-  });
-
-  const findLocation = async () => {
-    try {
-      const res = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyBgR1cwD4FPz094syf6m8Wy-uqMbFEXI7s`
-      );
-      if (res.data.results.length > 0) {
-        const { lat, lng } = res.data.results[0].geometry.location;
-        const coordinates = { lat, lng };
-        setCoordinates(coordinates);
-        setMapVisible(true);
-  
-        dispatch(setLocationData({ location, coordinates }));
-        setLocationFilled(true);
-      } else {
-        alert("Location not found!");
-        setLocationFilled(false);
-      }
-    } catch (error) {
-      console.error("Error fetching location:", error);
-      alert("Network error: Please check your internet connection or try again later.");
+  const handleLocationSubmit = () => {
+    if (location.trim() !== "") {
+      dispatch(setLocationData({ location }));
+      setLocationFilled(true);
+    } else {
+      alert("有効な場所を入力してください。");
       setLocationFilled(false);
     }
   };
-  
-  
-  
-
-  useEffect(() => {
-    if (location === "") {
-      setLocationFilled(false); 
-    }
-  }, [location, setLocationFilled]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -64,25 +28,12 @@ const LocationModal = ({ setLocationFilled }) => {
           required
         />
         <button
-          onClick={findLocation}
-          className="bg-blue-500 text-white py-2 px-4 rounded-md"
+          onClick={handleLocationSubmit}
+          className="bg-blue-500 text-white py-2 px-4 rounded-md whitespace-nowrap"
         >
-          <i className="fa-solid fa-magnifying-glass"></i>
+          提出する
         </button>
       </div>
-
-      {isLoaded && coordinates && (
-        <div className="mt-5">
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={coordinates}
-            zoom={12}
-            onUnmount={() => setMapVisible(false)} 
-          >
-            <Marker position={coordinates} />
-          </GoogleMap>
-        </div>
-      )}
     </div>
   );
 };
