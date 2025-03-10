@@ -9,10 +9,15 @@ const LocationModal = ({ setLocationFilled }) => {
   const [isDetailVisible, setIsDetailVisible] = useState(false);
 
   const fetchAddressFromZip = async (zip) => {
+    const normalizedZip = zip.replace(/\D/g, ""); // Remove non-numeric characters
+    if (normalizedZip.length !== 7) return;
+
     try {
-      const response = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zip}`);
+      const response = await fetch(
+        `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${normalizedZip}`
+      );
       const data = await response.json();
-      
+
       if (data.status === 200 && data.results) {
         const { address1, address2, address3 } = data.results[0];
         setAddress(`${address1}, ${address2}, ${address3}`);
@@ -27,18 +32,28 @@ const LocationModal = ({ setLocationFilled }) => {
   };
 
   const handleZipChange = (e) => {
-    const zip = e.target.value;
+    const zip = e.target.value.replace(/\D/g, ""); // Remove hyphens and other characters
     setZipCode(zip);
     if (zip.length === 7) {
       fetchAddressFromZip(zip);
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!address) {
+      if (zipCode.length === 7) {
+        await fetchAddressFromZip(zipCode);
+      } else {
+        toast.info("正しい郵便番号を入力してください。");
+        return;
+      }
+    }
+
     if (address && streetNumber && buildingName) {
       toast.success("住所が正常に保存されました。");
       setLocationFilled(true);
     } else {
+      setIsDetailVisible(true);
       toast.info("すべてのフィールドを入力してください。");
     }
   };
@@ -50,12 +65,15 @@ const LocationModal = ({ setLocationFilled }) => {
         type="text"
         value={zipCode}
         onChange={handleZipChange}
-        placeholder="郵便番号を入力"
+        placeholder="郵便番号を入力(1070062)"
         className="p-2 border border-gray-300 rounded-md w-full"
       />
-      
+
       {address && (
-        <div className="p-2 bg-gray-100 rounded-md cursor-pointer" onClick={() => setIsDetailVisible(!isDetailVisible)}>
+        <div
+          className="p-2 bg-gray-100 rounded-md cursor-pointer"
+          onClick={() => setIsDetailVisible(!isDetailVisible)}
+        >
           {address}
         </div>
       )}
@@ -67,10 +85,10 @@ const LocationModal = ({ setLocationFilled }) => {
             type="text"
             value={streetNumber}
             onChange={(e) => setStreetNumber(e.target.value)}
-            placeholder="1-19"
+            placeholder=""
             className="p-2 border border-gray-300 rounded-md w-full"
           />
-          
+
           <label className="text-sm font-medium">建物名:</label>
           <input
             type="text"
