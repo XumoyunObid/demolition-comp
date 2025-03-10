@@ -152,7 +152,7 @@ const MainModal = () => {
         次に続く質問にご回答ください
       </h1>
       <p className="text-md font-bold text-center">
-        回答をもとに、あなたに合った解体工事のプロをご紹介します。
+      お問い合わせ、お見積もりのご依頼は、こちらのフォームの質問にお答えください。
       </p>
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[400px] justify-center">
@@ -178,9 +178,6 @@ const MainModal = () => {
           任意
         </Button>
       </h1>
-      <h2 className="">
-        詳しい内容を書くことで、ぴったりのプロが見つかりやすくなります。
-      </h2>
       <br />
       <AdditionalModal />
     </div>,
@@ -200,7 +197,7 @@ const MainModal = () => {
       <CustomerModal setContactFilled={setContactFilled} />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">
-      <h1 className="text-xl font-bold text-blue-500">予約をする</h1>
+      <h1 className="text-xl font-bold text-blue-500">現地見積り日程を予約する</h1>
       <GoogleCalendarModal />
     </div>,
     <div className="py-[50px] md:w-[450px] flex flex-col gap-5 items-center h-[450px] justify-center">

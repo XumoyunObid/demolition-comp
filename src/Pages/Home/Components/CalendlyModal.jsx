@@ -109,6 +109,7 @@ const DateTimePickerModal = () => {
           onChange={onDateChange}
           format="YYYY-MM-DD"
           style={{ width: "100%", marginBottom: 20 }}
+          placeholder="日付を選んでください"
         />
 
         {selectedDate && (

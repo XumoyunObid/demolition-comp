@@ -7,7 +7,7 @@ const AboutUs = () => {
   return (
     <div className="w-full md:h-[600px] py-5 bg-white" id="about-us">
       <h1 className="text-2xl md:text-[50px] text-center text-black mb-8">
-        私たちについて
+        弊社の特徴
       </h1>
       <div className="flex flex-col md:flex-row gap-6 justify-center items-center px-6 md:pt-[80px]">
         <div
@@ -17,10 +17,9 @@ const AboutUs = () => {
           }}
         >
           <div className="bg-black/60 p-4 rounded-lg">
-            <h2 className="text-xl font-semibold mb-2 text-center">私たちの使命</h2>
+            <h2 className="text-xl font-semibold mb-2 text-center">企業使命</h2>
             <p>
-              私たちは、安全で効率的な解体サービスを専門としており、各プロジェクトを正確かつ慎重に実施することを約束しています。
-              私たちの品質と安全性への取り組みは、業界で他に類を見ません。
+              私たちは、豊富な経験、工事品質、施工内容の幅広さから、安心・安全で効率的な解体工事のプロとして、各プロジェクトを正確かつ慎重に実施することをお約束しています。
             </p>
           </div>
         </div>
@@ -32,7 +31,9 @@ const AboutUs = () => {
           }}
         >
           <div className="bg-black/60 p-4 rounded-lg">
-          <h2 className="text-xl font-semibold mb-2 text-center">私たちの価値観</h2>
+            <h2 className="text-xl font-semibold mb-2 text-center">
+              私たちの価値観
+            </h2>
             <p>
               私たちは誠実さ、透明性、そして環境への配慮を大切にしています。すべての解体作業において、環境保護と地域社会への貢献を
               最優先に考え、お客様の信頼に応えるサービスを提供します。

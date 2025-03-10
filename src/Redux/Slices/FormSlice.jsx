@@ -1,24 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  year: '不明',
-  startDate: '未定',
-  workDetails: 'その他',
-  description: '記述なし...',
-  location: '',
-  contact: {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
+  year: "不明",
+  startDate: "未定",
+  workDetails: "その他",
+  description: "記述なし...",
+  location: {
+    address1: "",
+    address2: "",
+    street: "",
+    city: "",
+    prefecture: "",
+    zipCode: "",
   },
-  buildingType: '',
+  contact: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  },
+  buildingType: "",
   selectedDate: null,
-  bookedAppointments: [], 
+  bookedAppointments: [],
 };
 
 const formSlice = createSlice({
-  name: 'form',
+  name: "form",
   initialState,
   reducers: {
     setYear(state, action) {
@@ -34,13 +41,10 @@ const formSlice = createSlice({
       state.description = action.payload;
     },
     setLocationData(state, action) {
-      state.location = action.payload;
+      state.location = { ...state.location, ...action.payload };
     },
     setContact(state, action) {
-      state.contact = {
-        ...state.contact,
-        ...action.payload,
-      };
+      state.contact = { ...state.contact, ...action.payload };
     },
     setSelectedButton(state, action) {
       state.buildingType = action.payload;
@@ -48,10 +52,10 @@ const formSlice = createSlice({
     setAppointmentDate(state, action) {
       state.selectedDate = action.payload;
     },
-    addBookedAppointment(state, action) { 
+    addBookedAppointment(state, action) {
       state.bookedAppointments.push(action.payload);
     },
-    removeBookedAppointment(state, action) { 
+    removeBookedAppointment(state, action) {
       state.bookedAppointments = state.bookedAppointments.filter(
         (appointment) => appointment !== action.payload
       );
@@ -69,7 +73,7 @@ export const {
   setSelectedButton,
   setAppointmentDate,
   addBookedAppointment,
-  removeBookedAppointment, // Added the removeBookedAppointment action
+  removeBookedAppointment,
 } = formSlice.actions;
 
 export const selectAppointmentDate = (state) => state.form.selectedDate;

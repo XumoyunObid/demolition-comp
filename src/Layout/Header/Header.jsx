@@ -32,7 +32,7 @@ const Header = () => {
               duration={500}
               className="text-lg cursor-pointer"
             >
-              我々について
+              弊社の特徴
             </Link>
           </li>
           <li className="hover:underline">
