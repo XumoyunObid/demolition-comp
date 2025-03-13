@@ -30,85 +30,91 @@ const MainModal = () => {
 
   const constructEmailBody = () => {
     return `
-    <table style="border-collapse: collapse; width: 100%;">
-      <tr>
-        <th style="border: 1px solid black; padding: 8px;">項目</th>
-        <th style="border: 1px solid black; padding: 8px;">内容</th>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">建物の種類</td>
-        <td style="border: 1px solid black; padding: 8px;">${
-          formData.buildingType
-        }</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">年</td>
-        <td style="border: 1px solid black; padding: 8px;">${formData.year}</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">開始日</td>
-        <td style="border: 1px solid black; padding: 8px;">${
-          formData.startDate
-        }</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">作業内容</td>
-        <td style="border: 1px solid black; padding: 8px;">${
-          formData.workDetails
-        }</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">説明</td>
-        <td style="border: 1px solid black; padding: 8px;">${
-          formData.description
-        }</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">場所</td>
-        <td style="border: 1px solid black; padding: 8px;">${
-          formData.location.location
-        }</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">顧客名</td>
-        <td style="border: 1px solid black; padding: 8px;">${
-          formData.contact.firstName
-        } ${formData.contact.lastName}</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">メール</td>
-        <td style="border: 1px solid black; padding: 8px;">${
-          formData.contact.email
-        }</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">電話番号</td>
-        <td style="border: 1px solid black; padding: 8px;">${
-          formData.contact.phone
-        }</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid black; padding: 8px;">予約日</td>
-        <td style="border: 1px solid black; padding: 8px;">${
-          formData.selectedDate || "未定"
-        }</td>
-      </tr>
-    </table>
+      <table style="border-collapse: collapse; width: 100%;">
+        <tr>
+          <th style="border: 1px solid black; padding: 8px;">項目</th>
+          <th style="border: 1px solid black; padding: 8px;">内容</th>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">建物の種類</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            formData.buildingType
+          }</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">年</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            formData.year
+          }</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">開始日</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            formData.startDate
+          }</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">作業内容</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            formData.workDetails
+          }</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">説明</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            formData.description
+          }</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">場所</td>
+          <td style="border: 1px solid black; padding: 8px;">
+            ${formData.location.address1}, ${formData.location.address2}, 
+            ${formData.location.street}, ${formData.location.city}, 
+            ${formData.location.prefecture}, ${formData.location.zipCode}
+          </td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">顧客名</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            formData.contact.firstName
+          } ${formData.contact.lastName}</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">メール</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            formData.contact.email
+          }</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">電話番号</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            formData.contact.phone
+          }</td>
+        </tr>
+        <tr>
+          <td style="border: 1px solid black; padding: 8px;">予約日</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            formData.selectedDate || "未定"
+          }</td>
+        </tr>
+      </table>
     `;
   };
 
   const constructSmSBody = () => {
     return `
-    建物の種類: ${formData.buildingType},
-    年: ${formData.year},
-    開始日: ${formData.startDate},
-    作業内容: ${formData.workDetails},
-    説明: ${formData.description},
-    場所: ${formData.location.location},
-    顧客名: ${formData.contact.firstName} ${formData.contact.lastName},
-    メール: ${formData.contact.email},
-    電話番号: ${formData.contact.phone},
-    予約日: ${formData.selectedDate}
+      建物の種類: ${formData.buildingType},
+      年: ${formData.year},
+      開始日: ${formData.startDate},
+      作業内容: ${formData.workDetails},
+      説明: ${formData.description},
+      場所: ${formData.location.address1}, ${formData.location.address2}, 
+            ${formData.location.street}, ${formData.location.city}, 
+            ${formData.location.prefecture}, ${formData.location.zipCode},
+      顧客名: ${formData.contact.firstName} ${formData.contact.lastName},
+      メール: ${formData.contact.email},
+      電話番号: ${formData.contact.phone},
+      予約日: ${formData.selectedDate || "未定"}
     `;
   };
 
