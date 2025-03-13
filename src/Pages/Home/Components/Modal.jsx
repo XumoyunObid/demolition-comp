@@ -124,12 +124,12 @@ const MainModal = () => {
     } else {
       setLoading(true);
       sendEmail({
-        email: "shikkarikaitai@gmail.com",
+        email: "obidjonov06122005@gmail.com",
         message: constructEmailBody(),
         subject: "New email from customer",
       });
       sendSMS({
-        phoneNumber: "+818056737627",
+        phoneNumber: "+998914766621",
         message: constructSmSBody(),
       });
       setTimeout(() => {
